@@ -5,13 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --minify terser",
+    "build": "vite build --minify esbuild",
     "build:prod": "vite build --minify terser --mode production",
     "build:analyze": "vite build --minify terser && npx vite-bundle-analyzer",
+    "build:ultra": "vite build --minify esbuild --mode production --sourcemap false",
     "build:fast": "vite build --minify esbuild --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "npm run build:prod && git add . && git commit -m 'Deploy optimized build' && git push"
+    "deploy": "npm run build:ultra && git add . && git commit -m 'Deploy ultra-fast build' && git push"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",

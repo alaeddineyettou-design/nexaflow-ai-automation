@@ -2,15 +2,18 @@ import { useState, useCallback, Suspense, useRef, useEffect } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import Navigation from './components/Navigation';
 import AnimatedShaderHero from './components/ui/animated-shader-hero';
-import { LogoCarouselDemo } from './components/LogoCarouselDemo';
-import { ContactDemo } from './components/ContactDemo';
-import { Footerdemo } from './components/ui/footer-section';
-import AIAutomationFeatures from './components/AIAutomationFeatures';
-import AIAutomationDatabaseDemo from './components/AIAutomationDatabaseDemo';
-import Pricing from './components/Pricing';
 import Preloader from './components/ui/preloader';
-import DisplayCards from './components/ui/display-cards';
 import { Toaster } from './components/ui/sonner';
+
+// Lazy loading for ALL heavy components
+import { lazy } from 'react';
+const LazyLogoCarouselDemo = lazy(() => import('./components/LogoCarouselDemo').then(module => ({ default: module.LogoCarouselDemo })));
+const LazyContactDemo = lazy(() => import('./components/ContactDemo').then(module => ({ default: module.ContactDemo })));
+const LazyFooterdemo = lazy(() => import('./components/ui/footer-section').then(module => ({ default: module.Footerdemo })));
+const LazyAIAutomationFeatures = lazy(() => import('./components/AIAutomationFeatures'));
+const LazyAIAutomationDatabaseDemo = lazy(() => import('./components/AIAutomationDatabaseDemo'));
+const LazyPricing = lazy(() => import('./components/Pricing'));
+const LazyDisplayCards = lazy(() => import('./components/ui/display-cards'));
 import { ChatWidgetRef } from './components/AdvancedChatWidget';
 
 // Lazy imports للمكونات الثقيلة مع الحفاظ على السرعة
@@ -22,26 +25,30 @@ import {
   LazyAdvancedChatWidget
 } from './utils/lazyComponents';
 
-// Professional Auto-Loading Component with Intersection Observer
+// Ultra-Fast Auto-Loading Component with Optimized Performance
 const AutoLoadSection = ({ 
   children,
   fallback,
-  rootMargin = "100px"
+  rootMargin = "50px",
+  priority = false
 }: { 
   children: React.ReactNode;
   fallback?: React.ReactNode;
   rootMargin?: string;
+  priority?: boolean;
 }) => {
 
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(priority); // Priority sections load immediately
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (priority) return; // Skip observer for priority sections
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !isLoaded) {
-          // Small delay to ensure smooth loading
-          setTimeout(() => setIsLoaded(true), 200);
+          // No delay for faster loading
+          setIsLoaded(true);
         }
       },
       { rootMargin }
@@ -52,15 +59,14 @@ const AutoLoadSection = ({
     }
 
     return () => observer.disconnect();
-  }, [isLoaded, rootMargin]);
+  }, [isLoaded, rootMargin, priority]);
 
   const defaultFallback = (
-    <div className="py-20">
+    <div className="py-12">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-slate-800 rounded w-1/3 mx-auto"></div>
-          <div className="h-4 bg-slate-800 rounded w-2/3 mx-auto"></div>
-          <div className="h-64 bg-slate-800 rounded"></div>
+        <div className="space-y-4">
+          <div className="h-4 bg-slate-800/20 rounded w-1/4 mx-auto"></div>
+          <div className="h-32 bg-slate-800/10 rounded"></div>
         </div>
       </div>
     </div>
@@ -73,13 +79,10 @@ const AutoLoadSection = ({
   );
 };
 
-// Loading Spinner Component
+// Ultra-Light Loading Spinner
 const LoadingSpinner = () => (
-  <div className="flex items-center justify-center py-20">
-    <div className="relative">
-      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500"></div>
-      <div className="absolute inset-0 animate-ping rounded-full h-16 w-16 border-b-2 border-blue-400 opacity-20"></div>
-    </div>
+  <div className="flex justify-center py-8">
+    <div className="animate-spin h-8 w-8 border-2 border-blue-500 border-t-transparent rounded-full"></div>
   </div>
 );
 
@@ -116,11 +119,15 @@ function App() {
             subtitle="Transform your business with intelligent automation - Lightning Fast!"
           />
           
-          {/* Logo Carousel - Keep */}
-          <LogoCarouselDemo />
+          {/* Logo Carousel - Priority Loading */}
+          <AutoLoadSection priority={true}>
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyLogoCarouselDemo />
+            </Suspense>
+          </AutoLoadSection>
           
-          {/* AI Assistant - Auto Loading */}
-          <AutoLoadSection rootMargin="200px">
+          {/* AI Assistant - Delayed Loading */}
+          <AutoLoadSection rootMargin="300px">
             <Suspense fallback={<LoadingSpinner />}>
               <LazyAI3DAssistantShowcase onStartChatting={handleStartChatting} />
             </Suspense>
@@ -129,28 +136,40 @@ function App() {
         
         {/* Database Section */}
         <section id="database">
-          <AIAutomationDatabaseDemo />
+          <AutoLoadSection rootMargin="200px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyAIAutomationDatabaseDemo />
+            </Suspense>
+          </AutoLoadSection>
         </section>
         
         {/* Features Section */}
         <section id="features">
-          <AIAutomationFeatures />
+          <AutoLoadSection rootMargin="150px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyAIAutomationFeatures />
+            </Suspense>
+          </AutoLoadSection>
         </section>
         
         {/* Showcase Section */}
         <section id="showcase">
-          {/* Automation Showcase - Auto Loading */}
-          <AutoLoadSection rootMargin="150px">
+          {/* Automation Showcase */}
+          <AutoLoadSection rootMargin="200px">
             <Suspense fallback={<LoadingSpinner />}>
               <LazyAIAutomationScrollShowcase />
             </Suspense>
           </AutoLoadSection>
           
           {/* Display Cards */}
-          <DisplayCards />
+          <AutoLoadSection rootMargin="150px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyDisplayCards />
+            </Suspense>
+          </AutoLoadSection>
           
-          {/* Interactive Features - Auto Loading */}
-          <AutoLoadSection rootMargin="100px">
+          {/* Interactive Features */}
+          <AutoLoadSection rootMargin="200px">
             <Suspense fallback={<LoadingSpinner />}>
               <LazyInteractiveAccordionDemo />
               <LazyCombinedFeaturedSection />
@@ -160,16 +179,28 @@ function App() {
         
         {/* Pricing Section */}
         <section id="pricing">
-          <Pricing />
+          <AutoLoadSection rootMargin="100px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyPricing />
+            </Suspense>
+          </AutoLoadSection>
         </section>
         
         {/* Contact Section */}
         <section id="contact">
-          <ContactDemo />
+          <AutoLoadSection rootMargin="100px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyContactDemo />
+            </Suspense>
+          </AutoLoadSection>
         </section>
         
         {/* Footer */}
-        <Footerdemo />
+        <AutoLoadSection rootMargin="50px">
+          <Suspense fallback={<div />}>
+            <LazyFooterdemo />
+          </Suspense>
+        </AutoLoadSection>
         
         {/* Advanced Chat Widget - Auto Loading */}
         <AutoLoadSection rootMargin="50px">
