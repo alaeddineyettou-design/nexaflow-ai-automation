@@ -4,21 +4,26 @@
  */
 
 export const AssetConfig = {
-  // CDN Base URL (will be updated after Netlify deployment)
-  CDN_BASE_URL: 'https://nexaflow-assets.netlify.app',
+  // CDN Base URL - Active Netlify CDN
+  CDN_BASE_URL: 'https://comfy-salamander-c473dc.netlify.app',
   
-  // 3D Spline Scenes - External CDN URLs
+  // 3D Spline Scenes - Optimized External URLs
   SPLINE_SCENES: {
-    // Primary scenes - critical for user experience
+    // Primary scenes - critical for user experience (immediate load)
     AI_ASSISTANT_SHOWCASE: 'https://prod.spline.design/16rsYnJk7RTDMt6X/scene.splinecode',
-    AUTOMATION_WORKFLOW: 'https://prod.spline.design/AI-5YRO3W3gKC26/scene.splinecode',
+    AUTOMATION_WORKFLOW: 'https://prod.spline.design/mOsYG5UokaH2ltI1/scene.splinecode',
     DASHBOARD_ANALYTICS: 'https://prod.spline.design/orYUSO8TjzUdTJ9Q/scene.splinecode',
     
-    // Secondary scenes - can be lazy loaded
+    // Secondary scenes - lazy loaded for performance
     DIGITAL_SERENITY: 'https://prod.spline.design/pQeHHoqnhAG2JOK7/scene.splinecode',
-    CONTACT_DEMO: 'https://prod.spline.design/XJ-wvEGxABcTIrDn/scene.splinecode',
+    CONTACT_DEMO: 'https://prod.spline.design/XJ-wvEGxABcTIrDn/scene.splinecode', 
     PORTFOLIO_SHOWCASE: 'https://prod.spline.design/D1HrYUfhCqLCzFiN/scene.splinecode',
-    TESTIMONIALS_3D: 'https://prod.spline.design/P5JMHHqHUqrFKPm7/scene.splinecode'
+    TESTIMONIALS_3D: 'https://prod.spline.design/P5JMHHqHUqrFKPm7/scene.splinecode',
+    
+    // Additional scenes for comprehensive showcase
+    ADVANCED_CHAT_WIDGET: 'https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode',
+    AI_3D_VISUALIZATION: 'https://prod.spline.design/AI-5YRO3W3gKC26/scene.splinecode',
+    INTERACTIVE_DEMO: 'https://prod.spline.design/16rsYnJk7RTDMt6X/scene.splinecode'
   },
   
   // Image Assets

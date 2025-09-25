@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, Suspense } from 'react';
+import { useState, useCallback, useRef, Suspense, useEffect } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import Navigation from './components/Navigation';
 import AnimatedShaderHero from './components/ui/animated-shader-hero';
@@ -12,6 +12,7 @@ import Preloader from './components/ui/preloader';
 import DisplayCards from './components/ui/display-cards';
 import { Toaster } from './components/ui/sonner';
 import { ChatWidgetRef } from './components/AdvancedChatWidget';
+import { trackWebVitals, perfMonitor } from './lib/performance-monitor';
 
 // Lazy imports للمكونات الثقيلة - يحافظ على جميع الوظائف
 import {
@@ -33,8 +34,21 @@ function App() {
   const [showPreloader, setShowPreloader] = useState(true);
   const chatWidgetRef = useRef<ChatWidgetRef>(null);
 
+  // Initialize performance monitoring
+  useEffect(() => {
+    trackWebVitals();
+    console.log('🚀 Performance monitoring initialized');
+    
+    // Log performance report after 10 seconds
+    setTimeout(() => {
+      const report = perfMonitor.getReport();
+      console.log('📊 Performance Report:', report);
+    }, 10000);
+  }, []);
+
   const handlePreloaderComplete = useCallback(() => {
     setShowPreloader(false);
+    perfMonitor.endTimer('initial_load');
   }, []);
 
   const handleStartChatting = useCallback(() => {
