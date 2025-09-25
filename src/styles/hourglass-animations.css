@@ -1,0 +1,201 @@
+/* Hourglass Sand Animation Styles */
+
+@keyframes sandFall {
+  0% {
+    transform: translateY(-100%) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(0%) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes sandAccumulate {
+  0% {
+    height: 0%;
+    opacity: 0.5;
+  }
+  100% {
+    height: 100%;
+    opacity: 1;
+  }
+}
+
+@keyframes hourglassGlow {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(251, 191, 36, 0.3),
+      0 0 40px rgba(251, 191, 36, 0.2),
+      0 0 60px rgba(251, 191, 36, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(251, 191, 36, 0.5),
+      0 0 60px rgba(251, 191, 36, 0.3),
+      0 0 90px rgba(251, 191, 36, 0.2);
+  }
+}
+
+@keyframes timeParticles {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-40px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(3px) rotate(-1deg);
+  }
+}
+
+/* Hourglass Container Effects */
+.hourglass-container {
+  position: relative;
+  animation: subtleFloat 8s ease-in-out infinite;
+  contain: layout style paint;
+  isolation: isolate;
+}
+
+.hourglass-container::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(
+    circle at center,
+    rgba(251, 191, 36, 0.1) 0%,
+    rgba(251, 191, 36, 0.05) 50%,
+    transparent 100%
+  );
+  border-radius: 50%;
+  animation: hourglassGlow 4s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Sand Particle Effects */
+.sand-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(45deg, #f59e0b, #fbbf24);
+  border-radius: 50%;
+  animation: sandFall 3s linear infinite;
+  contain: layout style paint;
+  will-change: transform, opacity;
+}
+
+.sand-particle:nth-child(odd) {
+  animation-delay: -0.5s;
+  animation-duration: 2.5s;
+}
+
+.sand-particle:nth-child(even) {
+  animation-delay: -1s;
+  animation-duration: 3.5s;
+}
+
+/* Time Flow Effects */
+.time-flow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.time-flow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 20px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(251, 191, 36, 0.8) 50%,
+    transparent 100%
+  );
+  transform: translateX(-50%);
+  animation: sandFall 2s ease-in infinite;
+}
+
+/* Enhanced Visual Effects for Page */
+.hourglass-ambient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  contain: layout style paint;
+  overflow: hidden;
+}
+
+.hourglass-ambient::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(251, 191, 36, 0.02) 0%,
+    rgba(251, 191, 36, 0.01) 50%,
+    transparent 100%
+  );
+  animation: hourglassGlow 6s ease-in-out infinite alternate;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .hourglass-container {
+    animation-duration: 6s;
+  }
+  
+  .sand-particle {
+    width: 1px;
+    height: 1px;
+  }
+}
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  .hourglass-container,
+  .sand-particle,
+  .hourglass-ambient::before {
+    animation: none;
+  }
+  
+  .time-flow::after {
+    animation: none;
+    opacity: 0.5;
+  }
+}

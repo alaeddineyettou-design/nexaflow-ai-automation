@@ -1,0 +1,126 @@
+/* تحسينات اللوغو والتأثيرات البصرية */
+
+/* أنيميشن النقط المتحركة */
+@keyframes pulse-dots {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.nexaflow-pulse-dots {
+  animation: pulse-dots 2s ease-in-out infinite;
+}
+
+/* تأثير التدفق المتحرك */
+@keyframes flow-animation {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.nexaflow-flow-line {
+  stroke-dasharray: 20 20;
+  animation: flow-animation 3s linear infinite;
+}
+
+/* تأثير الهالة المضيئة */
+@keyframes glow-pulse {
+  0%, 100% { 
+    filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.5));
+    opacity: 0.8;
+  }
+  50% { 
+    filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.8));
+    opacity: 1;
+  }
+}
+
+.nexaflow-glow {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+/* تأثير النص المتدرج */
+.nexaflow-text-gradient {
+  background: linear-gradient(
+    90deg,
+    #2563eb 0%,
+    #0891b2 25%,
+    #2563eb 50%,
+    #0891b2 75%,
+    #2563eb 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 4s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* تحسين الرؤية والوضوح */
+.nexaflow-crisp {
+  image-rendering: crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+}
+
+/* تأثير التداخل المتقدم */
+.nexaflow-overlay {
+  backdrop-filter: blur(10px) saturate(150%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* تأثيرات الhover المحسنة */
+.nexaflow-hover:hover {
+  transform: scale(1.05) rotate(2deg);
+  filter: brightness(1.1) saturate(1.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* تحسين الخطوط والوضوح */
+.nexaflow-text-crisp {
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "liga" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* تأثير الظلال المتطورة */
+.nexaflow-shadow-complex {
+  filter: 
+    drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1))
+    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.08))
+    drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.05));
+}
+
+/* تحسين الأداء والعرض */
+.nexaflow-optimized {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* تأثيرات الضوء المتحرك */
+@keyframes light-sweep {
+  0% { transform: translateX(-100%) skew(-15deg); }
+  100% { transform: translateX(100%) skew(-15deg); }
+}
+
+.nexaflow-light-sweep::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: light-sweep 3s ease-in-out infinite;
+}
