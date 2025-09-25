@@ -110,50 +110,63 @@ function App() {
         <Navigation />
         
         {/* Hero Section - Ultra Fast & Lightweight */}
-        <AnimatedShaderHero 
-          headline={{ line1: "NEXAFLOW AI", line2: "Automation" }}
-          subtitle="Transform your business with intelligent automation - Lightning Fast!"
-        />
+        <section id="home">
+          <AnimatedShaderHero 
+            headline={{ line1: "NEXAFLOW AI", line2: "Automation" }}
+            subtitle="Transform your business with intelligent automation - Lightning Fast!"
+          />
+          
+          {/* Logo Carousel - Keep */}
+          <LogoCarouselDemo />
+          
+          {/* AI Assistant - Auto Loading */}
+          <AutoLoadSection rootMargin="200px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyAI3DAssistantShowcase onStartChatting={handleStartChatting} />
+            </Suspense>
+          </AutoLoadSection>
+        </section>
         
-        {/* Logo Carousel - Keep */}
-        <LogoCarouselDemo />
+        {/* Database Section */}
+        <section id="database">
+          <AIAutomationDatabaseDemo />
+        </section>
         
-        {/* AI Assistant - Auto Loading */}
-        <AutoLoadSection rootMargin="200px">
-          <Suspense fallback={<LoadingSpinner />}>
-            <LazyAI3DAssistantShowcase onStartChatting={handleStartChatting} />
-          </Suspense>
-        </AutoLoadSection>
+        {/* Features Section */}
+        <section id="features">
+          <AIAutomationFeatures />
+        </section>
         
-        {/* Features */}
-        <AIAutomationFeatures />
+        {/* Showcase Section */}
+        <section id="showcase">
+          {/* Automation Showcase - Auto Loading */}
+          <AutoLoadSection rootMargin="150px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyAIAutomationScrollShowcase />
+            </Suspense>
+          </AutoLoadSection>
+          
+          {/* Display Cards */}
+          <DisplayCards />
+          
+          {/* Interactive Features - Auto Loading */}
+          <AutoLoadSection rootMargin="100px">
+            <Suspense fallback={<LoadingSpinner />}>
+              <LazyInteractiveAccordionDemo />
+              <LazyCombinedFeaturedSection />
+            </Suspense>
+          </AutoLoadSection>
+        </section>
         
-        {/* Database Demo */}
-        <AIAutomationDatabaseDemo />
+        {/* Pricing Section */}
+        <section id="pricing">
+          <Pricing />
+        </section>
         
-        {/* Automation Showcase - Auto Loading */}
-        <AutoLoadSection rootMargin="150px">
-          <Suspense fallback={<LoadingSpinner />}>
-            <LazyAIAutomationScrollShowcase />
-          </Suspense>
-        </AutoLoadSection>
-        
-        {/* Display Cards */}
-        <DisplayCards />
-        
-        {/* Interactive Features - Auto Loading */}
-        <AutoLoadSection rootMargin="100px">
-          <Suspense fallback={<LoadingSpinner />}>
-            <LazyInteractiveAccordionDemo />
-            <LazyCombinedFeaturedSection />
-          </Suspense>
-        </AutoLoadSection>
-        
-        {/* Pricing */}
-        <Pricing />
-        
-        {/* Contact */}
-        <ContactDemo />
+        {/* Contact Section */}
+        <section id="contact">
+          <ContactDemo />
+        </section>
         
         {/* Footer */}
         <Footerdemo />
