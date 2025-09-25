@@ -5,18 +5,17 @@ import AnimatedShaderHero from './components/ui/animated-shader-hero';
 import Preloader from './components/ui/preloader';
 import { Toaster } from './components/ui/sonner';
 
-// Lazy loading for ALL heavy components
-import { lazy } from 'react';
-const LazyLogoCarouselDemo = lazy(() => import('./components/LogoCarouselDemo').then(module => ({ default: module.LogoCarouselDemo })));
-const LazyContactDemo = lazy(() => import('./components/ContactDemo').then(module => ({ default: module.ContactDemo })));
-const LazyFooterdemo = lazy(() => import('./components/ui/footer-section').then(module => ({ default: module.Footerdemo })));
-const LazyAIAutomationFeatures = lazy(() => import('./components/AIAutomationFeatures'));
-const LazyAIAutomationDatabaseDemo = lazy(() => import('./components/AIAutomationDatabaseDemo'));
-const LazyPricing = lazy(() => import('./components/Pricing'));
-const LazyDisplayCards = lazy(() => import('./components/ui/display-cards'));
+// Direct imports - Stable and reliable
+import { LogoCarouselDemo } from './components/LogoCarouselDemo';
+import { ContactDemo } from './components/ContactDemo';
+import { Footerdemo } from './components/ui/footer-section';
+import AIAutomationFeatures from './components/AIAutomationFeatures';
+import AIAutomationDatabaseDemo from './components/AIAutomationDatabaseDemo';
+import Pricing from './components/Pricing';
+import DisplayCards from './components/ui/display-cards';
 import { ChatWidgetRef } from './components/AdvancedChatWidget';
 
-// Lazy imports للمكونات الثقيلة مع الحفاظ على السرعة
+// Import existing lazy components from utils
 import {
   LazyAI3DAssistantShowcase,
   LazyAIAutomationScrollShowcase,
@@ -122,7 +121,7 @@ function App() {
           {/* Logo Carousel - Priority Loading */}
           <AutoLoadSection priority={true}>
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyLogoCarouselDemo />
+              <LogoCarouselDemo />
             </Suspense>
           </AutoLoadSection>
           
@@ -138,7 +137,7 @@ function App() {
         <section id="database">
           <AutoLoadSection rootMargin="200px">
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyAIAutomationDatabaseDemo />
+              <AIAutomationDatabaseDemo />
             </Suspense>
           </AutoLoadSection>
         </section>
@@ -147,7 +146,7 @@ function App() {
         <section id="features">
           <AutoLoadSection rootMargin="150px">
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyAIAutomationFeatures />
+              <AIAutomationFeatures />
             </Suspense>
           </AutoLoadSection>
         </section>
@@ -164,7 +163,7 @@ function App() {
           {/* Display Cards */}
           <AutoLoadSection rootMargin="150px">
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyDisplayCards />
+              <DisplayCards />
             </Suspense>
           </AutoLoadSection>
           
@@ -181,7 +180,7 @@ function App() {
         <section id="pricing">
           <AutoLoadSection rootMargin="100px">
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyPricing />
+              <Pricing />
             </Suspense>
           </AutoLoadSection>
         </section>
@@ -190,7 +189,7 @@ function App() {
         <section id="contact">
           <AutoLoadSection rootMargin="100px">
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyContactDemo />
+              <ContactDemo />
             </Suspense>
           </AutoLoadSection>
         </section>
@@ -198,7 +197,7 @@ function App() {
         {/* Footer */}
         <AutoLoadSection rootMargin="50px">
           <Suspense fallback={<div />}>
-            <LazyFooterdemo />
+            <Footerdemo />
           </Suspense>
         </AutoLoadSection>
         
