@@ -1,6 +1,16 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
 import { memo } from 'react';
-import { getAssetURL, getLoadingPriority, AssetConfig } from '../../config/assets';
+
+// Scene URLs mapping
+const SCENE_URLS = {
+  AI_ASSISTANT_SHOWCASE: 'https://prod.spline.design/16rsYnJk7RTDMt6X/scene.splinecode',
+  AUTOMATION_WORKFLOW: 'https://prod.spline.design/mOsYG5UokaH2ltI1/scene.splinecode',
+  DASHBOARD_ANALYTICS: 'https://prod.spline.design/orYUSO8TjzUdTJ9Q/scene.splinecode',
+  DIGITAL_SERENITY: 'https://prod.spline.design/pQeHHoqnhAG2JOK7/scene.splinecode',
+  CONTACT_DEMO: 'https://prod.spline.design/XJ-wvEGxABcTIrDn/scene.splinecode',
+  PORTFOLIO_SHOWCASE: 'https://prod.spline.design/D1HrYUfhCqLCzFiN/scene.splinecode',
+  TESTIMONIALS_3D: 'https://prod.spline.design/P5JMHHqHUqrFKPm7/scene.splinecode',
+} as const;
 
 // Lazy load Spline with better error handling
 const Spline = lazy(() => 
@@ -8,7 +18,7 @@ const Spline = lazy(() =>
 );
 
 interface OptimizedSplineProps {
-  sceneKey: keyof typeof AssetConfig.SPLINE_SCENES;
+  sceneKey: keyof typeof SCENE_URLS;
   className?: string;
   fallback?: React.ReactNode;
   lazy?: boolean;
@@ -26,8 +36,8 @@ export const OptimizedSpline = memo(({
   const [shouldLoad, setShouldLoad] = useState(!lazy);
   const [hasError, setHasError] = useState(false);
   
-  const sceneUrl = getAssetURL(sceneKey);
-  const loadPriority = priority || getLoadingPriority(sceneKey);
+  const sceneUrl = SCENE_URLS[sceneKey];
+  const loadPriority = priority || 'low';
   
   // Intersection Observer for lazy loading
   useEffect(() => {
@@ -45,7 +55,7 @@ export const OptimizedSpline = memo(({
       { rootMargin: '100px' } // Start loading 100px before entering viewport
     );
     
-    const element = document.querySelector(`[data-spline="${sceneKey}"]`);
+    const element = document.querySelector(`[data-spline="${String(sceneKey)}"]`);
     if (element) {
       observer.observe(element);
     }
@@ -63,7 +73,7 @@ export const OptimizedSpline = memo(({
         <p className="text-slate-300 text-sm">
           {loadPriority === 'critical' ? 'Loading Critical 3D Scene...' : 'Loading 3D Scene...'}
         </p>
-        <p className="text-slate-400 text-xs">{sceneKey}</p>
+        <p className="text-slate-400 text-xs">{String(sceneKey)}</p>
       </div>
     </div>
   );
@@ -99,9 +109,9 @@ export const OptimizedSpline = memo(({
         <Spline 
           scene={sceneUrl}
           className="w-full h-full"
-          onLoad={() => console.log(`✅ Loaded: ${sceneKey}`)}
+          onLoad={() => console.log(`✅ Loaded: ${String(sceneKey)}`)}
           onError={() => {
-            console.error(`❌ Failed to load: ${sceneKey}`);
+            console.error(`❌ Failed to load: ${String(sceneKey)}`);
             setHasError(true);
           }}
           style={{ 

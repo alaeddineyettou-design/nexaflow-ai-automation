@@ -36,19 +36,31 @@ function App() {
 
   // Initialize performance monitoring
   useEffect(() => {
-    trackWebVitals();
-    console.log('🚀 Performance monitoring initialized');
-    
-    // Log performance report after 10 seconds
-    setTimeout(() => {
-      const report = perfMonitor.getReport();
-      console.log('📊 Performance Report:', report);
-    }, 10000);
+    try {
+      trackWebVitals();
+      console.log('🚀 Performance monitoring initialized');
+      
+      // Log performance report after 10 seconds
+      setTimeout(() => {
+        try {
+          const report = perfMonitor.getReport();
+          console.log('📊 Performance Report:', report);
+        } catch (error) {
+          console.warn('Performance report error:', error);
+        }
+      }, 10000);
+    } catch (error) {
+      console.warn('Performance monitoring error:', error);
+    }
   }, []);
 
   const handlePreloaderComplete = useCallback(() => {
     setShowPreloader(false);
-    perfMonitor.endTimer('initial_load');
+    try {
+      perfMonitor.endTimer('initial_load');
+    } catch (error) {
+      console.warn('Performance timer error:', error);
+    }
   }, []);
 
   const handleStartChatting = useCallback(() => {
