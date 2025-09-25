@@ -1,4 +1,4 @@
-import { useState, useCallback, Suspense, useRef } from 'react';
+import { useState, useCallback, Suspense, useRef, useEffect } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import Navigation from './components/Navigation';
 import AnimatedShaderHero from './components/ui/animated-shader-hero';
@@ -22,50 +22,54 @@ import {
   LazyAdvancedChatWidget
 } from './utils/lazyComponents';
 
-// Smart Progressive Loading Component
-const SmartLoadingSection = ({ 
-  title, 
-  description, 
-  onLoadContent,
-  isLoaded,
-  loadingComponent 
+// Professional Auto-Loading Component with Intersection Observer
+const AutoLoadSection = ({ 
+  children,
+  fallback,
+  rootMargin = "100px"
 }: { 
-  title: string; 
-  description: string; 
-  onLoadContent: () => void;
-  isLoaded: boolean;
-  loadingComponent?: React.ReactNode;
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+  rootMargin?: string;
 }) => {
-  if (isLoaded && loadingComponent) {
-    return <>{loadingComponent}</>;
-  }
 
-  return (
-    <section className="py-20 bg-slate-950">
-      <div className="max-w-7xl mx-auto px-4 text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">{title}</h2>
-        <p className="text-slate-300 mb-8">{description}</p>
-        <div className="bg-slate-900/50 rounded-lg p-12 border border-slate-800 hover:border-slate-700 transition-colors">
-          <div className="space-y-4">
-            <div className="animate-pulse space-y-3">
-              <div className="h-6 bg-gradient-to-r from-slate-700 to-slate-600 rounded"></div>
-              <div className="h-4 bg-slate-700 rounded"></div>
-              <div className="h-4 bg-slate-700 rounded w-3/4 mx-auto"></div>
-              <div className="h-40 bg-gradient-to-br from-slate-700 via-slate-600 to-slate-700 rounded-lg"></div>
-            </div>
-            <button 
-              onClick={onLoadContent}
-              className="mt-6 px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
-            >
-              🚀 Load Interactive Content
-            </button>
-            <p className="text-xs text-slate-500 mt-2">
-              Click to load advanced features without slowing down the main site
-            </p>
-          </div>
+  const [isLoaded, setIsLoaded] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isLoaded) {
+          // Small delay to ensure smooth loading
+          setTimeout(() => setIsLoaded(true), 200);
+        }
+      },
+      { rootMargin }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, [isLoaded, rootMargin]);
+
+  const defaultFallback = (
+    <div className="py-20">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-slate-800 rounded w-1/3 mx-auto"></div>
+          <div className="h-4 bg-slate-800 rounded w-2/3 mx-auto"></div>
+          <div className="h-64 bg-slate-800 rounded"></div>
         </div>
       </div>
-    </section>
+    </div>
+  );
+
+  return (
+    <div ref={ref}>
+      {isLoaded ? children : (fallback || defaultFallback)}
+    </div>
   );
 };
 
@@ -81,13 +85,7 @@ const LoadingSpinner = () => (
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true);
-  const [loadedSections, setLoadedSections] = useState({
-    ai3dAssistant: false,
-    automationShowcase: false,
-    interactiveFeatures: false,
-    advancedChat: false
-  });
-  
+
   const chatWidgetRef = useRef<ChatWidgetRef>(null);
 
   const handlePreloaderComplete = useCallback(() => {
@@ -100,10 +98,6 @@ function App() {
     } else {
       window.open('https://cal.com/alae-automation/ai-automation-business', '_blank');
     }
-  }, []);
-
-  const loadSection = useCallback((section: keyof typeof loadedSections) => {
-    setLoadedSections(prev => ({ ...prev, [section]: true }));
   }, []);
 
   if (showPreloader) {
@@ -124,18 +118,12 @@ function App() {
         {/* Logo Carousel - Keep */}
         <LogoCarouselDemo />
         
-        {/* AI Assistant - Smart Loading */}
-        <SmartLoadingSection 
-          title="AI Assistant Showcase"
-          description="Experience our advanced AI automation platform with interactive 3D demonstrations"
-          isLoaded={loadedSections.ai3dAssistant}
-          onLoadContent={() => loadSection('ai3dAssistant')}
-          loadingComponent={
-            <Suspense fallback={<LoadingSpinner />}>
-              <LazyAI3DAssistantShowcase onStartChatting={handleStartChatting} />
-            </Suspense>
-          }
-        />
+        {/* AI Assistant - Auto Loading */}
+        <AutoLoadSection rootMargin="200px">
+          <Suspense fallback={<LoadingSpinner />}>
+            <LazyAI3DAssistantShowcase onStartChatting={handleStartChatting} />
+          </Suspense>
+        </AutoLoadSection>
         
         {/* Features */}
         <AIAutomationFeatures />
@@ -143,35 +131,23 @@ function App() {
         {/* Database Demo */}
         <AIAutomationDatabaseDemo />
         
-        {/* Automation Showcase - Smart Loading */}
-        <SmartLoadingSection 
-          title="AI Automation in Action"
-          description="See how our platform transforms business processes with intelligent automation"
-          isLoaded={loadedSections.automationShowcase}
-          onLoadContent={() => loadSection('automationShowcase')}
-          loadingComponent={
-            <Suspense fallback={<LoadingSpinner />}>
-              <LazyAIAutomationScrollShowcase />
-            </Suspense>
-          }
-        />
+        {/* Automation Showcase - Auto Loading */}
+        <AutoLoadSection rootMargin="150px">
+          <Suspense fallback={<LoadingSpinner />}>
+            <LazyAIAutomationScrollShowcase />
+          </Suspense>
+        </AutoLoadSection>
         
         {/* Display Cards */}
         <DisplayCards />
         
-        {/* Interactive Features - Smart Loading */}
-        <SmartLoadingSection 
-          title="Interactive Features"
-          description="Explore our comprehensive suite of automation tools and capabilities"
-          isLoaded={loadedSections.interactiveFeatures}
-          onLoadContent={() => loadSection('interactiveFeatures')}
-          loadingComponent={
-            <Suspense fallback={<LoadingSpinner />}>
-              <LazyInteractiveAccordionDemo />
-              <LazyCombinedFeaturedSection />
-            </Suspense>
-          }
-        />
+        {/* Interactive Features - Auto Loading */}
+        <AutoLoadSection rootMargin="100px">
+          <Suspense fallback={<LoadingSpinner />}>
+            <LazyInteractiveAccordionDemo />
+            <LazyCombinedFeaturedSection />
+          </Suspense>
+        </AutoLoadSection>
         
         {/* Pricing */}
         <Pricing />
@@ -182,26 +158,12 @@ function App() {
         {/* Footer */}
         <Footerdemo />
         
-        {/* Advanced Chat Widget - Smart Loading */}
-        {loadedSections.advancedChat && (
+        {/* Advanced Chat Widget - Auto Loading */}
+        <AutoLoadSection rootMargin="50px">
           <Suspense fallback={<div />}>
             <LazyAdvancedChatWidget ref={chatWidgetRef} />
           </Suspense>
-        )}
-        
-        {/* Load Chat Button */}
-        {!loadedSections.advancedChat && (
-          <div className="fixed bottom-6 right-6 z-50">
-            <button
-              onClick={() => loadSection('advancedChat')}
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 group"
-            >
-              <svg className="w-6 h-6 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-              </svg>
-            </button>
-          </div>
-        )}
+        </AutoLoadSection>
         
         <Toaster />
       </div>
