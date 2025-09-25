@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import Navigation from './components/Navigation';
 import AnimatedShaderHero from './components/ui/animated-shader-hero';
@@ -43,6 +43,10 @@ function App() {
     setShowPreloader(false);
   }, []);
 
+  const handleStartChatting = useCallback(() => {
+    window.open('https://cal.com/alae-automation/ai-automation-business', '_blank');
+  }, []);
+
   if (showPreloader) {
     return <Preloader onComplete={handlePreloaderComplete} />;
   }
@@ -53,10 +57,7 @@ function App() {
         <Navigation />
         
         {/* Hero Section - Lightweight */}
-        <AnimatedShaderHero 
-          headline={{ line1: "NEXAFLOW AI", line2: "Automation" }}
-          subtitle="Transform your business with intelligent automation"
-        />
+        <AnimatedShaderHero />
         
         {/* Logo Carousel - Keep */}
         <LogoCarouselDemo />
