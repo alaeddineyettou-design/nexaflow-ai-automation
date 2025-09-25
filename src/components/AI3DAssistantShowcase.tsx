@@ -1,6 +1,6 @@
 'use client'
 
-import { SplineScene } from "@/components/ui/splite";
+import { OptimizedSpline } from "@/components/ui/optimized-spline";
 import { Spotlight } from "@/components/ui/spotlight"
 import { RainbowButton } from "@/components/ui/rainbow-button"
 import { BlurredStagger } from "@/components/ui/blurred-stagger-text"
@@ -110,9 +110,11 @@ export function AI3DAssistantShowcase({ onStartChatting }: AI3DAssistantShowcase
 
             {/* Right content - 3D Scene */}
             <div className="flex-1 relative">
-              <SplineScene 
-                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+              <OptimizedSpline 
+                sceneKey="AI_ASSISTANT_SHOWCASE"
                 className="w-full h-full"
+                lazy={false}
+                priority="critical"
               />
               
               {/* Overlay text bubble */}
