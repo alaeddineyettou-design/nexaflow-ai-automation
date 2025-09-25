@@ -6,15 +6,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NEXAFLOW - AI Automation Platform</title>
     
-    <!-- Resource hints لتحميل أسرع -->
+    <!-- Resource hints لتحميل فائق السرعة -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://prod.spline.design">
     <link rel="dns-prefetch" href="https://n8n.srv962505.hstgr.cloud">
     <link rel="dns-prefetch" href="https://cal.com">
     
+    <!-- Critical resources preload -->
+    <link rel="modulepreload" href="/src/main.tsx">
+    <link rel="prefetch" href="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode">
+    <link rel="prefetch" href="https://prod.spline.design/mOsYG5UokaH2ltI1/scene.splinecode">
+    
     <!-- Performance optimizations -->
     <meta name="theme-color" content="#0f172a">
     <meta name="color-scheme" content="dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <!-- Critical CSS optimization -->
+    <style>
+      /* Critical above-the-fold styles */
+      body { margin: 0; background: #0f172a; }
+      #root { min-height: 100vh; }
+      .loading-placeholder { 
+        height: 100vh; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

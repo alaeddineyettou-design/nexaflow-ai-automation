@@ -22,18 +22,22 @@ export default defineConfig({
     sourcemap: false,
     rollupOptions: {
       output: {
-        // تقسيم الكود بذكاء
+        // تقسيم الكود بذكاء للسرعة القصوى
         manualChunks: {
-          'react-vendor': ['react', 'react-dom'],
-          'ui-vendor': ['framer-motion', '@radix-ui/react-slot', '@radix-ui/react-tooltip'],
-          '3d-vendor': ['@splinetool/react-spline', '@splinetool/runtime'],
-          'animation-vendor': ['gsap', '@studio-freight/lenis'],
-          'chart-vendor': ['recharts'],
+          'react-core': ['react', 'react-dom'],
+          'ui-light': ['@radix-ui/react-slot', '@radix-ui/react-tooltip'], 
+          'animation-heavy': ['framer-motion', 'gsap'],
+          '3d-heavy': ['@splinetool/react-spline', '@splinetool/runtime', '@react-three/fiber', '@react-three/drei'],
+          'chart-heavy': ['recharts'],
+          'utils': ['clsx', 'tailwind-merge', 'class-variance-authority'],
         },
       },
     },
     // تحسين حجم المكتبات
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 500,
+    // تحسينات إضافية للسرعة
+    cssCodeSplit: true,
+    assetsInlineLimit: 4096,
   },
   resolve: {
     alias: {

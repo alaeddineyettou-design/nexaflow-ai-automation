@@ -6,9 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build --minify terser",
+    "build:prod": "vite build --minify terser --mode production",
     "build:analyze": "vite build --minify terser && npx vite-bundle-analyzer",
+    "build:fast": "vite build --minify esbuild --mode production",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build:prod && git add . && git commit -m 'Deploy optimized build' && git push"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
