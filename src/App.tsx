@@ -52,10 +52,10 @@ function App() {
       <div className="min-h-screen bg-slate-950">
         <Navigation />
         
-        {/* Hero Section - Lightweight */}
+        {/* Hero Section - Ultra Fast & Lightweight */}
         <AnimatedShaderHero 
           headline={{ line1: "NEXAFLOW AI", line2: "Automation" }}
-          subtitle="Transform your business with intelligent automation"
+          subtitle="Transform your business with intelligent automation - Lightning Fast!"
         />
         
         {/* Logo Carousel - Keep */}
