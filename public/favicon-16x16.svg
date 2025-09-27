@@ -1,0 +1,15 @@
+<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="flowGradient16" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Ultra simplified for 16px -->
+  <g transform="translate(1, 4)">
+    <!-- Single flow arrow -->
+    <path d="M0 4 L4 4 L4 2 L8 6 L4 10 L4 8 L0 8 Z" fill="url(#flowGradient16)"/>
+    <path d="M6 4 L10 4 L10 2 L14 6 L10 10 L10 8 L6 8 Z" fill="url(#flowGradient16)" opacity="0.7"/>
+  </g>
+</svg>

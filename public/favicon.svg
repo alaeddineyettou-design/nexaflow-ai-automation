@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="flowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle for better visibility -->
+  <circle cx="256" cy="256" r="240" fill="#0F172A" opacity="0.1"/>
+  
+  <!-- NexaFlow Arrow Icon - Simplified for favicon -->
+  <g transform="translate(106, 180)">
+    <!-- First arrow -->
+    <path d="M0 32 C0 20 8 12 20 12 L120 12 C132 12 140 20 140 32 C140 44 132 52 120 52 L60 52 L100 92 C108 100 108 112 100 120 C92 128 80 128 72 120 L32 80 L32 120 C32 132 24 140 12 140 C0 140 -8 132 -8 120 L-8 32 C-8 20 0 12 12 12 C0 12 0 20 0 32 Z" fill="url(#flowGradient)"/>
+    
+    <!-- Second arrow -->
+    <path d="M100 32 C100 20 108 12 120 12 L220 12 C232 12 240 20 240 32 C240 44 232 52 220 52 L160 52 L200 92 C208 100 208 112 200 120 C192 128 180 128 172 120 L132 80 L132 120 C132 132 124 140 112 140 C100 140 92 132 92 120 L92 32 C92 20 100 12 112 12 C100 12 100 20 100 32 Z" fill="url(#flowGradient)"/>
+    
+    <!-- Third arrow -->
+    <path d="M200 32 C200 20 208 12 220 12 L300 12 C312 12 320 20 320 32 C320 44 312 52 300 52 L240 52 L280 92 C288 100 288 112 280 120 C272 128 260 128 252 120 L212 80 L212 120 C212 132 204 140 192 140 C180 140 172 132 172 120 L172 32 C172 20 180 12 192 12 C180 12 200 20 200 32 Z" fill="url(#flowGradient)" opacity="0.8"/>
+  </g>
+  
+  <!-- Connection dots for tech feel -->
+  <circle cx="150" cy="300" r="8" fill="#3B82F6" opacity="0.6"/>
+  <circle cx="256" cy="320" r="6" fill="#60A5FA" opacity="0.8"/>
+  <circle cx="362" cy="300" r="8" fill="#3B82F6" opacity="0.6"/>
+  
+  <!-- Connection lines -->
+  <line x1="150" y1="300" x2="256" y2="320" stroke="#3B82F6" stroke-width="3" opacity="0.4"/>
+  <line x1="256" y1="320" x2="362" y2="300" stroke="#3B82F6" stroke-width="3" opacity="0.4"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="flowGradient32" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Simplified arrows for small size -->
+  <g transform="translate(2, 8)">
+    <!-- Arrow 1 -->
+    <path d="M0 8 L8 8 L8 4 L14 10 L8 16 L8 12 L0 12 Z" fill="url(#flowGradient32)"/>
+    <!-- Arrow 2 -->
+    <path d="M8 8 L16 8 L16 4 L22 10 L16 16 L16 12 L8 12 Z" fill="url(#flowGradient32)" opacity="0.8"/>
+    <!-- Arrow 3 -->
+    <path d="M16 8 L24 8 L24 4 L30 10 L24 16 L24 12 L16 12 Z" fill="url(#flowGradient32)" opacity="0.6"/>
+  </g>
+</svg>
