@@ -1,19 +1,24 @@
 <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="flowGradient32" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1E40AF;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
+    <linearGradient id="nGradient32" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1D4ED8;stop-opacity:1" />
       <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
     </linearGradient>
   </defs>
   
-  <!-- Simplified arrows for small size -->
-  <g transform="translate(2, 8)">
-    <!-- Arrow 1 -->
-    <path d="M0 8 L8 8 L8 4 L14 10 L8 16 L8 12 L0 12 Z" fill="url(#flowGradient32)"/>
-    <!-- Arrow 2 -->
-    <path d="M8 8 L16 8 L16 4 L22 10 L16 16 L16 12 L8 12 Z" fill="url(#flowGradient32)" opacity="0.8"/>
-    <!-- Arrow 3 -->
-    <path d="M16 8 L24 8 L24 4 L30 10 L24 16 L24 12 L16 12 Z" fill="url(#flowGradient32)" opacity="0.6"/>
+  <!-- Background -->
+  <rect width="32" height="32" rx="4" fill="#0F172A"/>
+  
+  <!-- Bold N for 32px -->
+  <g transform="translate(6, 4)">
+    <path d="M0 4 L0 20 C0 21 1 22 2 22 L4 22 C5 22 6 21 6 20 L6 12 L14 20 C14.5 20.5 15 20.5 15.5 20.5 L17.5 20.5 C18.5 20.5 19.5 19.5 19.5 18.5 L19.5 4 C19.5 3 18.5 2 17.5 2 L15.5 2 C14.5 2 13.5 3 13.5 4 L13.5 12 L5.5 4 C5 3.5 4.5 3.5 4 3.5 L2 3.5 C1 3.5 0 4.5 0 4 Z" 
+          fill="url(#nGradient32)" 
+          stroke="#60A5FA" 
+          stroke-width="0.5"/>
   </g>
+  
+  <!-- Small tech dots -->
+  <circle cx="6" cy="8" r="1.5" fill="#60A5FA" opacity="0.6"/>
+  <circle cx="26" cy="12" r="1" fill="#3B82F6" opacity="0.5"/>
+  <circle cx="24" cy="26" r="1" fill="#60A5FA" opacity="0.4"/>
 </svg>
