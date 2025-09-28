@@ -1,12 +1,16 @@
 <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="nGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    <linearGradient id="automationGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0EA5E9;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="gearGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#64748B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#94A3B8;stop-opacity:1" />
     </linearGradient>
     <filter id="glow">
-      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
       <feMerge> 
         <feMergeNode in="coloredBlur"/>
         <feMergeNode in="SourceGraphic"/>
@@ -14,35 +18,64 @@
     </filter>
   </defs>
   
-  <!-- Background for contrast -->
-  <circle cx="256" cy="256" r="240" fill="#0F172A" stroke="none"/>
+  <!-- Background -->
+  <circle cx="256" cy="256" r="240" fill="#F8FAFC" stroke="none"/>
   
-  <!-- Large prominent N letter -->
-  <g transform="translate(140, 90)">
-    <!-- N letter path - bold and clear -->
-    <path d="M0 60 L0 340 C0 350 8 358 18 358 L50 358 C60 358 68 350 68 340 L68 180 L164 340 C166 344 170 346 174 346 L206 346 C216 346 224 338 224 328 L224 60 C224 50 216 42 206 42 L174 42 C164 42 156 50 156 60 L156 220 L60 60 C58 56 54 54 50 54 L18 54 C8 54 0 62 0 60 Z" 
-          fill="url(#nGradient)" 
-          filter="url(#glow)"
-          stroke="#60A5FA" 
-          stroke-width="2"/>
+  <!-- Main circular automation symbol -->
+  <g transform="translate(256, 256)">
+    <!-- Outer circle -->
+    <circle cx="0" cy="0" r="180" fill="none" stroke="url(#automationGradient)" stroke-width="8" opacity="0.3"/>
+    
+    <!-- Main automation circuit -->
+    <circle cx="0" cy="0" r="140" fill="none" stroke="url(#automationGradient)" stroke-width="16"/>
+    
+    <!-- Central connection hub -->
+    <circle cx="0" cy="0" r="20" fill="url(#automationGradient)"/>
+    
+    <!-- Circuit nodes -->
+    <circle cx="0" cy="-100" r="12" fill="url(#automationGradient)">
+      <animate attributeName="r" values="8;15;8" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="70" cy="-70" r="10" fill="url(#automationGradient)">
+      <animate attributeName="r" values="6;12;6" dur="2.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="0" r="12" fill="url(#automationGradient)">
+      <animate attributeName="r" values="8;15;8" dur="1.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="70" cy="70" r="10" fill="url(#automationGradient)">
+      <animate attributeName="r" values="6;12;6" dur="2.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="0" cy="100" r="12" fill="url(#automationGradient)">
+      <animate attributeName="r" values="8;15;8" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="-70" cy="70" r="10" fill="url(#automationGradient)">
+      <animate attributeName="r" values="6;12;6" dur="2.8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="-100" cy="0" r="12" fill="url(#automationGradient)">
+      <animate attributeName="r" values="8;15;8" dur="2.1s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="-70" cy="-70" r="10" fill="url(#automationGradient)">
+      <animate attributeName="r" values="6;12;6" dur="1.9s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Connection lines -->
+    <line x1="0" y1="0" x2="0" y2="-100" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
+    <line x1="0" y1="0" x2="70" y2="-70" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
+    <line x1="0" y1="0" x2="100" y2="0" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
+    <line x1="0" y1="0" x2="70" y2="70" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
+    <line x1="0" y1="0" x2="0" y2="100" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
+    <line x1="0" y1="0" x2="-70" y2="70" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
+    <line x1="0" y1="0" x2="-100" y2="0" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
+    <line x1="0" y1="0" x2="-70" y2="-70" stroke="url(#automationGradient)" stroke-width="3" opacity="0.7"/>
   </g>
   
-  <!-- Tech connection points -->
-  <circle cx="140" cy="150" r="12" fill="#60A5FA" opacity="0.8">
-    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="2s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="380" cy="200" r="10" fill="#3B82F6" opacity="0.7">
-    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2.5s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="370" cy="360" r="8" fill="#60A5FA" opacity="0.6">
-    <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite"/>
-  </circle>
-  <circle cx="120" cy="380" r="10" fill="#3B82F6" opacity="0.5">
-    <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2.2s" repeatCount="indefinite"/>
-  </circle>
-  
-  <!-- Connection lines -->
-  <line x1="140" y1="150" x2="380" y2="200" stroke="#3B82F6" stroke-width="2" opacity="0.3"/>
-  <line x1="380" y1="200" x2="370" y2="360" stroke="#60A5FA" stroke-width="2" opacity="0.3"/>
-  <line x1="370" y1="360" x2="120" y2="380" stroke="#3B82F6" stroke-width="2" opacity="0.3"/>
+  <!-- Gear element in top-left -->
+  <g transform="translate(120, 120) scale(0.8)">
+    <path d="M50 10 L60 10 L65 0 L75 0 L80 10 L90 10 L90 20 L100 25 L95 35 L90 40 L90 50 L80 50 L75 60 L65 60 L60 50 L50 50 L50 40 L45 35 L40 25 L50 20 Z" 
+          fill="url(#gearGradient)" 
+          opacity="0.6">
+      <animateTransform attributeName="transform" type="rotate" values="0;360" dur="8s" repeatCount="indefinite"/>
+    </path>
+    <circle cx="65" cy="30" r="15" fill="none" stroke="url(#gearGradient)" stroke-width="3"/>
+  </g>
 </svg>

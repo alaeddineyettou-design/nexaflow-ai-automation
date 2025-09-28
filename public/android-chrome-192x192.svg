@@ -1,39 +1,55 @@
 <svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="nGradient192" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#1D4ED8;stop-opacity:1" />
+    <linearGradient id="automationGradient192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0EA5E9;stop-opacity:1" />
       <stop offset="50%" style="stop-color:#3B82F6;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#60A5FA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1D4ED8;stop-opacity:1" />
     </linearGradient>
-    <filter id="glow192">
-      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-      <feMerge> 
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
+    <linearGradient id="gearGradient192" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#64748B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#94A3B8;stop-opacity:1" />
+    </linearGradient>
   </defs>
   
   <!-- Background for Android -->
-  <rect width="192" height="192" rx="24" fill="#0F172A"/>
+  <rect width="192" height="192" rx="24" fill="#F8FAFC"/>
   
-  <!-- N letter for Android icon -->
-  <g transform="translate(52, 35)">
-    <path d="M0 22 L0 128 C0 133 4 137 9 137 L20 137 C25 137 29 133 29 128 L29 65 L59 128 C60 130 62 131 64 131 L75 131 C80 131 84 127 84 122 L84 22 C84 17 80 13 75 13 L64 13 C59 13 55 17 55 22 L55 85 L25 22 C24 20 22 19 20 19 L9 19 C4 19 0 23 0 22 Z" 
-          fill="url(#nGradient192)" 
-          filter="url(#glow192)"
-          stroke="#60A5FA" 
-          stroke-width="1.5"/>
+  <!-- Main automation symbol -->
+  <g transform="translate(96, 96)">
+    <!-- Outer circle -->
+    <circle cx="0" cy="0" r="70" fill="none" stroke="url(#automationGradient192)" stroke-width="6"/>
+    
+    <!-- Central hub -->
+    <circle cx="0" cy="0" r="9" fill="url(#automationGradient192)"/>
+    
+    <!-- Circuit nodes -->
+    <circle cx="0" cy="-50" r="6" fill="url(#automationGradient192)"/>
+    <circle cx="35" cy="-35" r="5" fill="url(#automationGradient192)"/>
+    <circle cx="50" cy="0" r="6" fill="url(#automationGradient192)"/>
+    <circle cx="35" cy="35" r="5" fill="url(#automationGradient192)"/>
+    <circle cx="0" cy="50" r="6" fill="url(#automationGradient192)"/>
+    <circle cx="-35" cy="35" r="5" fill="url(#automationGradient192)"/>
+    <circle cx="-50" cy="0" r="6" fill="url(#automationGradient192)"/>
+    <circle cx="-35" cy="-35" r="5" fill="url(#automationGradient192)"/>
+    
+    <!-- Connection lines -->
+    <line x1="0" y1="0" x2="0" y2="-50" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
+    <line x1="0" y1="0" x2="35" y2="-35" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
+    <line x1="0" y1="0" x2="50" y2="0" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
+    <line x1="0" y1="0" x2="35" y2="35" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
+    <line x1="0" y1="0" x2="0" y2="50" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
+    <line x1="0" y1="0" x2="-35" y2="35" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
+    <line x1="0" y1="0" x2="-50" y2="0" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
+    <line x1="0" y1="0" x2="-35" y2="-35" stroke="url(#automationGradient192)" stroke-width="2.5" opacity="0.7"/>
   </g>
   
-  <!-- Android-optimized tech elements -->
-  <circle cx="45" cy="55" r="5" fill="#60A5FA" opacity="0.8"/>
-  <circle cx="147" cy="75" r="4" fill="#3B82F6" opacity="0.7"/>
-  <circle cx="140" cy="140" r="4" fill="#60A5FA" opacity="0.6"/>
-  <circle cx="50" cy="150" r="4" fill="#3B82F6" opacity="0.5"/>
+  <!-- Gear elements -->
+  <g transform="translate(45, 45) scale(0.7)">
+    <circle cx="0" cy="0" r="14" fill="url(#gearGradient192)" opacity="0.6"/>
+    <circle cx="0" cy="0" r="7" fill="none" stroke="url(#gearGradient192)" stroke-width="2"/>
+  </g>
   
-  <!-- Connection network -->
-  <line x1="45" y1="55" x2="147" y2="75" stroke="#3B82F6" stroke-width="1.5" opacity="0.4"/>
-  <line x1="147" y1="75" x2="140" y2="140" stroke="#60A5FA" stroke-width="1.5" opacity="0.4"/>
-  <line x1="140" y1="140" x2="50" y2="150" stroke="#3B82F6" stroke-width="1.5" opacity="0.4"/>
+  <g transform="translate(147, 147) scale(0.5)">
+    <circle cx="0" cy="0" r="10" fill="url(#gearGradient192)" opacity="0.4"/>
+  </g>
 </svg>
