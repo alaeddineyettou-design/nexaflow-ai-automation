@@ -17,7 +17,10 @@ import { Spinner } from "./spinner"
 import { toast } from "sonner"
 
 function Footerdemo() {
-  const [isDarkMode, setIsDarkMode] = React.useState(false)
+  // Initialize dark mode based on current document state
+  const [isDarkMode, setIsDarkMode] = React.useState(() => {
+    return document.documentElement.classList.contains("dark")
+  })
   const [email, setEmail] = React.useState("")
   const [isSubmitting, setIsSubmitting] = React.useState(false)
 

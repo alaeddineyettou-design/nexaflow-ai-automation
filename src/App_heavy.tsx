@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, Suspense, useEffect } from 'react';
+import { useState, useCallback, Suspense, useEffect } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import Navigation from './components/Navigation';
 import AnimatedShaderHero from './components/ui/animated-shader-hero';
@@ -11,7 +11,6 @@ import Pricing from './components/Pricing';
 import Preloader from './components/ui/preloader';
 import DisplayCards from './components/ui/display-cards';
 import { Toaster } from './components/ui/sonner';
-import { ChatWidgetRef } from './components/AdvancedChatWidget';
 import { trackWebVitals, perfMonitor } from './lib/performance-monitor';
 
 // Lazy imports للمكونات الثقيلة - يحافظ على جميع الوظائف
@@ -19,8 +18,7 @@ import {
   LazyAI3DAssistantShowcase,
   LazyAIAutomationScrollShowcase,
   LazyInteractiveAccordionDemo,
-  LazyCombinedFeaturedSection,
-  LazyAdvancedChatWidget
+  LazyCombinedFeaturedSection
 } from './utils/lazyComponents';
 
 // Loading component للمكونات الثقيلة
@@ -32,7 +30,6 @@ const LoadingSpinner = () => (
 
 function App() {
   const [showPreloader, setShowPreloader] = useState(true);
-  const chatWidgetRef = useRef<ChatWidgetRef>(null);
 
   // Initialize performance monitoring
   useEffect(() => {
@@ -64,9 +61,7 @@ function App() {
   }, []);
 
   const handleStartChatting = useCallback(() => {
-    if (chatWidgetRef.current) {
-      chatWidgetRef.current.openChat();
-    }
+    window.open('https://cal.com/alae-automation/ai-automation-business', '_blank');
   }, []);
 
   return (
@@ -182,22 +177,6 @@ function App() {
             <Footerdemo />
           </footer>
         </main>
-        
-        {/* Advanced Chat Widget */}
-        <Suspense fallback={null}>
-          <LazyAdvancedChatWidget 
-            ref={chatWidgetRef}
-            clientId="nexaflow"
-            clientName="Nexaflow AI Automation"
-            primaryColor="#3b82f6"
-            secondaryColor="#8b5cf6"
-            welcomeMessage="Hello! I'm your AI automation assistant. How can I help you automate your business?"
-            title="AI Automation Assistant"
-            placeholder="Type your message here to discuss automation solutions..."
-            position="bottom-right"
-          />
-        </Suspense>
-        
         <Toaster />
       </div>
     </ThemeProvider>

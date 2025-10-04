@@ -13,12 +13,47 @@ interface AI3DAssistantShowcaseProps {
 
 export function AI3DAssistantShowcase({ onStartChatting }: AI3DAssistantShowcaseProps) {
   const handleStartChatting = () => {
-    if (onStartChatting) {
-      onStartChatting();
-    } else {
-      // Fallback to original behavior if no callback provided
-      window.open('https://cal.com/alae-automation/ai-automation-business', '_blank');
+    // Try to open the OriginalChatWidget using global function
+    try {
+      const windowWithChat = window as any;
+      if (windowWithChat.openChatWidget) {
+        windowWithChat.openChatWidget();
+        
+        // Add a delay to ensure the widget is fully expanded, then focus input
+        setTimeout(() => {
+          const chatInput = document.querySelector('.chat-input') as HTMLInputElement;
+          if (chatInput) {
+            chatInput.focus();
+          }
+        }, 300);
+        return;
+      }
+      
+      // Fallback: try to find and click the chat toggle button
+      const chatButton = document.querySelector('.chat-toggle-btn') as HTMLElement;
+      if (chatButton) {
+        chatButton.click();
+        setTimeout(() => {
+          const chatInput = document.querySelector('.chat-input') as HTMLInputElement;
+          if (chatInput) {
+            chatInput.focus();
+          }
+        }, 300);
+        return;
+      }
+      
+      // If onStartChatting callback is provided, use it as fallback
+      if (onStartChatting) {
+        onStartChatting();
+        return;
+      }
+      
+    } catch (error) {
+      console.log('Chat widget not found, falling back to Cal.com');
     }
+    
+    // Final fallback to Cal.com
+    window.open('https://cal.com/alae-automation/ai-automation-business', '_blank');
   };
 
   return (

@@ -45,7 +45,6 @@ export const AssetConfig = {
   
   // Fallback configuration
   FALLBACKS: {
-    SPLINE_FALLBACK: '/public/assets_task_01k54vg6thf3dstd84j7cmqqh7_1757878481_img_1 (1).webp',
     LOADING_PLACEHOLDER: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iYSIgeDQ9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHJlY3QgZmlsbD0iIzBmMTcyYSIgeDQ9IjAiIHk9IjAiIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg=='
   }
 };
@@ -58,7 +57,7 @@ export const getAssetURL = (assetKey: keyof typeof AssetConfig.SPLINE_SCENES | k
   if (assetKey in AssetConfig.IMAGES) {
     return AssetConfig.IMAGES[assetKey as keyof typeof AssetConfig.IMAGES];
   }
-  return AssetConfig.FALLBACKS.SPLINE_FALLBACK;
+  return AssetConfig.FALLBACKS.LOADING_PLACEHOLDER;
 };
 
 // Check if asset should be preloaded

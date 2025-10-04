@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    
+    <style>
+      /* NexaFlow Chat Widget Styling */
+      #nexaflow-chat {
+        position: fixed !important;
+        bottom: 20px !important;
+        right: 20px !important;
+        z-index: 999999 !important;
+        background: transparent !important;
+        border: none !important;
+      }
+      
+      #nexaflow-chat .ai-chat-toggle-btn {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%) !important;
+        color: white !important;
+        border: none !important;
+        border-radius: 50px !important;
+        padding: 16px 24px !important;
+        cursor: pointer !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+        font-weight: 600 !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 20px rgba(59, 130, 246, 0.1) !important;
+        transition: all 0.3s ease !important;
+        animation: automationGlow 3s infinite !important;
+        position: relative !important;
+        overflow: hidden !important;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif !important;
+      }
+      
+      #nexaflow-chat .ai-chat-toggle-btn:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2) !important;
+      }
+      
+      @keyframes automationGlow {
+        0%, 100% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 20px rgba(59, 130, 246, 0.1); }
+        50% { box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2), 0 0 30px rgba(59, 130, 246, 0.2); }
+      }
+    </style>
+    
+    <!-- App Icons - Professional Standard -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="16x16" href="/favicon-16x16.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="32x32" href="/favicon-32x32.svg" />
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.svg" />
+    
+    <!-- Android Chrome Icons -->
+    <link rel="icon" type="image/svg+xml" sizes="192x192" href="/android-chrome-192x192.svg" />
+    <link rel="icon" type="image/svg+xml" sizes="512x512" href="/favicon.svg" />
+    
+    <!-- Windows Metro Tile -->
+    <meta name="msapplication-TileImage" content="/favicon.svg" />
+    <meta name="msapplication-TileColor" content="#0F172A" />
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXAFLOW AI | Automation Platform</title>
+    
+    <!-- Enhanced Meta Tags -->
+    <meta name="description" content="Transform your business with NEXAFLOW AI - Advanced automation platform for intelligent workflows, data processing, and business optimization." />
+    <meta name="keywords" content="AI automation, business automation, workflow optimization, NEXAFLOW, artificial intelligence, process automation" />
+    <meta name="author" content="NEXAFLOW AI" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="NEXAFLOW AI | Automation Platform" />
+    <meta property="og:description" content="Transform your business with intelligent AI automation - Lightning Fast!" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://nexaflowautomation.cloud/" />
+    <meta property="og:image" content="https://nexaflowautomation.cloud/favicon.svg" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NEXAFLOW AI | Automation Platform" />
+    <meta name="twitter:description" content="Transform your business with intelligent AI automation" />
+    <meta name="twitter:image" content="https://nexaflowautomation.cloud/favicon.svg" />
+    
+    <!-- Progressive Web App -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Resource hints لتحميل فائق السرعة -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://prod.spline.design">
+    <link rel="dns-prefetch" href="https://n8n.srv962505.hstgr.cloud">
+    <link rel="dns-prefetch" href="https://cal.com">
+    
+    <!-- Critical resources preload -->
+    <link rel="modulepreload" href="/src/main.tsx">
+    <link rel="prefetch" href="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode">
+    <link rel="prefetch" href="https://prod.spline.design/mOsYG5UokaH2ltI1/scene.splinecode">
+    
+    <!-- CDN preconnection for assets -->
+    <link rel="dns-prefetch" href="https://comfy-salamander-c473dc.netlify.app">
+    <link rel="preconnect" href="https://comfy-salamander-c473dc.netlify.app" crossorigin>
+    
+    <!-- Performance optimizations -->
+    <meta name="theme-color" content="#0f172a">
+    <meta name="color-scheme" content="dark">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <!-- Critical CSS optimization -->
+    <style>
+      /* Critical above-the-fold styles */
+      body { margin: 0; background: #0f172a; }
+      #root { min-height: 100vh; }
+      .loading-placeholder { 
+        height: 100vh; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+      }
+      
+      /* Chat Widget Text Visibility Fix */
+      .ai-chat-message-text {
+        color: #1f2937 !important; /* Dark gray text */
+        font-weight: 500 !important;
+      }
+      
+      .ai-chat-message.assistant .ai-chat-message-text {
+        color: #374151 !important; /* Darker gray for AI messages */
+      }
+      
+      .ai-chat-message.user .ai-chat-message-text {
+        color: #ffffff !important; /* White text for user messages */
+      }
+      
+      .ai-chat-message-content {
+        background: rgba(255, 255, 255, 0.98) !important; /* Slightly more opaque background */
+      }
+      
+      .ai-chat-message.user .ai-chat-message-content {
+        background: #3b82f6 !important; /* Blue background for user messages */
+      }
+      
+      /* Chat input text fix */
+      .ai-chat-input input {
+        color: #374151 !important;
+      }
+      
+      .ai-chat-input input::placeholder {
+        color: #9ca3af !important;
+      }
+      
+      /* Make chat button more visible and clickable */
+      .ai-chat-button, .chat-button, .chat-toggle {
+        cursor: pointer !important;
+        pointer-events: auto !important;
+      }
+      
+      /* Ensure chat widget is always accessible */
+      .ai-chat-widget {
+        z-index: 999999 !important;
+      }
+      
+      /* Force chat widget to open in expanded mode */
+      .ai-chat-widget.expanded,
+      .ai-chat-widget.open {
+        width: 380px !important;
+        height: 600px !important;
+        background: white !important;
+        border-radius: 16px !important;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+      
+      /* Hide the minimized state when expanded */
+      .ai-chat-widget.expanded .ai-chat-toggle-btn,
+      .ai-chat-widget.open .ai-chat-toggle-btn {
+        display: none !important;
+      }
+      
+      /* Make sure the chat interface is visible when expanded */
+      .ai-chat-widget.expanded .ai-chat-interface,
+      .ai-chat-widget.open .ai-chat-interface,
+      .ai-chat-widget.expanded .ai-chat-messages,
+      .ai-chat-widget.open .ai-chat-messages,
+      .ai-chat-widget.expanded .ai-chat-input,
+      .ai-chat-widget.open .ai-chat-input {
+        display: block !important;
+        visibility: visible !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Advanced Chat Widget Configuration -->
+    <script>
+        window.CHAT_WIDGET_CONFIG = {
+            backendUrl: 'https://pro-converse.preview.emergentagent.com'
+        };
+        
+        // Helper function to open chat widget programmatically
+        window.openChatWidget = function() {
+            try {
+                // Method 1: Try to use the global aiChatWidget function if available
+                if (window.aiChatWidget && typeof window.aiChatWidget.toggle === 'function') {
+                    window.aiChatWidget.toggle();
+                    // Force it to expanded state
+                    setTimeout(() => {
+                        const widget = document.querySelector('.ai-chat-widget');
+                        if (widget) {
+                            widget.classList.add('expanded', 'open', 'visible');
+                            widget.classList.remove('minimized');
+                        }
+                    }, 100);
+                    return true;
+                }
+                
+                // Method 2: Try to click the chat toggle button directly
+                const chatButton = document.querySelector('.ai-chat-toggle-btn');
+                if (chatButton && chatButton.click) {
+                    chatButton.click();
+                    // Force expanded state
+                    setTimeout(() => {
+                        const widget = document.querySelector('.ai-chat-widget');
+                        if (widget) {
+                            widget.classList.add('expanded', 'open', 'visible');
+                            widget.classList.remove('minimized');
+                        }
+                    }, 100);
+                    return true;
+                }
+                
+                // Method 3: Try alternative selectors
+                const altButton = document.querySelector('.ai-chat-button, .chat-button, .chat-toggle');
+                if (altButton && altButton.click) {
+                    altButton.click();
+                    return true;
+                }
+                
+                // Method 4: Try to find chat widget and force it to expanded state
+                const chatWidget = document.querySelector('.ai-chat-widget');
+                if (chatWidget) {
+                    chatWidget.style.display = 'block';
+                    chatWidget.classList.add('expanded', 'open', 'visible');
+                    chatWidget.classList.remove('minimized');
+                    return true;
+                }
+                
+                // Method 5: Try global chat widget API
+                if (window.AIChatWidget && window.AIChatWidget.open) {
+                    window.AIChatWidget.open();
+                    return true;
+                }
+                
+                return false;
+            } catch (error) {
+                console.log('Error opening chat widget:', error);
+                return false;
+            }
+        };
+    </script>
+    <script src="https://pro-converse.preview.emergentagent.com/embed-widget.js"></script>
+    
+    <!-- Force show chat widget -->
+    <script>
+        // Wait for the chat widget to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if chat widget loaded
+            let checkCount = 0;
+            const maxChecks = 20;
+            
+            const checkForWidget = () => {
+                checkCount++;
+                console.log('Checking for chat widget...', checkCount);
+                
+                // Look for any chat widget elements
+                const widget = document.querySelector('.ai-chat-widget, [class*="chat"], [id*="chat"], iframe[src*="chat"], iframe[src*="converse"]');
+                
+                if (widget) {
+                    console.log('Chat widget found!', widget);
+                    // Make sure it's visible
+                    widget.style.display = 'block !important';
+                    widget.style.visibility = 'visible !important';
+                    widget.style.opacity = '1 !important';
+                    widget.style.zIndex = '999999 !important';
+                    return;
+                }
+                
+                // Check for global chat functions
+                if (window.aiChatWidget || window.emergentagent || window.proConverse) {
+                    console.log('Chat API found!', { 
+                        aiChatWidget: !!window.aiChatWidget, 
+                        emergentagent: !!window.emergentagent,
+                        proConverse: !!window.proConverse 
+                    });
+                    return;
+                }
+                
+                // Continue checking
+                if (checkCount < maxChecks) {
+                    setTimeout(checkForWidget, 500);
+                } else {
+                    console.log('Chat widget not found after', maxChecks, 'attempts');
+                    // Create a simple chat button as fallback
+                    createFallbackChatButton();
+                }
+            };
+            
+            // Start checking
+            setTimeout(checkForWidget, 100);
+        });
+        
+        // Fallback chat button
+        function createFallbackChatButton() {
+            console.log('Creating fallback chat button...');
+            const chatBtn = document.createElement('div');
+            chatBtn.innerHTML = `
+                <div style="
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                    border-radius: 50%;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 999999;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                    transition: transform 0.2s;
+                " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'" onclick="openChatModal()">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="white">
+                        <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+                    </svg>
+                </div>
+            `;
+            document.body.appendChild(chatBtn);
+        }
+        
+        // Chat modal
+        function openChatModal() {
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.8);
+                    z-index: 9999999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                " onclick="this.remove()">
+                    <div style="
+                        background: white;
+                        border-radius: 12px;
+                        max-width: 500px;
+                        width: 100%;
+                        max-height: 80vh;
+                        overflow: hidden;
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                    " onclick="event.stopPropagation()">
+                        <div style="
+                            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                            color: white;
+                            padding: 20px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        ">
+                            <h3 style="margin: 0; font-size: 18px;">💬 NexaFlow Chat</h3>
+                            <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
+                                background: none;
+                                border: none;
+                                color: white;
+                                font-size: 24px;
+                                cursor: pointer;
+                                padding: 0;
+                                width: 30px;
+                                height: 30px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">×</button>
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <div style="margin-bottom: 20px;">
+                                <div style="
+                                    width: 80px;
+                                    height: 80px;
+                                    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                                    border-radius: 50%;
+                                    margin: 0 auto 20px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                ">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                </div>
+                                <h4 style="margin: 0 0 10px; color: #333;">مرحباً بك في NexaFlow!</h4>
+                                <p style="margin: 0; color: #666; line-height: 1.5;">
+                                    نحن هنا لمساعدتك في أتمتة عملك بالذكاء الاصطناعي. 
+                                    للتواصل المباشر، يمكنك استخدام الطرق التالية:
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <a href="https://cal.com/alae-automation/ai-automation-business" target="_blank" style="
+                                    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                                    color: white;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    text-decoration: none;
+                                    font-weight: 500;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    transition: transform 0.2s;
+                                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                    📅 حجز موعد
+                                </a>
+                                <a href="mailto:alaeddine@automationsolutions.bond" style="
+                                    background: #10b981;
+                                    color: white;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    text-decoration: none;
+                                    font-weight: 500;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    transition: transform 0.2s;
+                                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                    ✉️ إرسال إيميل
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        // Also listen for when the script loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                if (window.aiChatWidget) {
+                    console.log('AI Chat Widget loaded successfully');
+                } else {
+                    console.log('Pro-converse widget not found, using fallback');
+                }
+            }, 2000);
+        });
+    </script>
+  </body>
+</html>
+            const modal = document.createElement('div');
+            modal.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.8);
+                    z-index: 9999999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                " onclick="this.remove()">
+                    <div style="
+                        background: white;
+                        border-radius: 12px;
+                        max-width: 500px;
+                        width: 100%;
+                        max-height: 80vh;
+                        overflow: hidden;
+                        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+                    " onclick="event.stopPropagation()">
+                        <div style="
+                            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                            color: white;
+                            padding: 20px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        ">
+                            <h3 style="margin: 0; font-size: 18px;">💬 NexaFlow Chat</h3>
+                            <button onclick="this.closest('[style*=\"position: fixed\"]').remove()" style="
+                                background: none;
+                                border: none;
+                                color: white;
+                                font-size: 24px;
+                                cursor: pointer;
+                                padding: 0;
+                                width: 30px;
+                                height: 30px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">×</button>
+                        </div>
+                        <div style="padding: 30px; text-align: center;">
+                            <div style="margin-bottom: 20px;">
+                                <div style="
+                                    width: 80px;
+                                    height: 80px;
+                                    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                                    border-radius: 50%;
+                                    margin: 0 auto 20px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                ">
+                                    <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                </div>
+                                <h4 style="margin: 0 0 10px; color: #333;">مرحباً بك في NexaFlow!</h4>
+                                <p style="margin: 0; color: #666; line-height: 1.5;">
+                                    نحن هنا لمساعدتك في أتمتة عملك بالذكاء الاصطناعي. 
+                                    للتواصل المباشر، يمكنك استخدام الطرق التالية:
+                                </p>
+                            </div>
+                            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                                <a href="https://cal.com/alae-automation/ai-automation-business" target="_blank" style="
+                                    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                                    color: white;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    text-decoration: none;
+                                    font-weight: 500;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    transition: transform 0.2s;
+                                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                    📅 حجز موعد
+                                </a>
+                                <a href="mailto:alaeddine@automationsolutions.bond" style="
+                                    background: #10b981;
+                                    color: white;
+                                    padding: 12px 24px;
+                                    border-radius: 8px;
+                                    text-decoration: none;
+                                    font-weight: 500;
+                                    display: inline-flex;
+                                    align-items: center;
+                                    gap: 8px;
+                                    transition: transform 0.2s;
+                                " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                    ✉️ إرسال إيميل
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+    </script>
+  </body>
+</html>

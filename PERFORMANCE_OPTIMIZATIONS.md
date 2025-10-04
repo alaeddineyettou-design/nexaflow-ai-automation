@@ -14,7 +14,6 @@
   - AIAutomationScrollShowcase  
   - InteractiveAccordionDemo
   - CombinedFeaturedSection
-  - AdvancedChatWidget
 
 ### ✅ 3. Resource Hints
 - Preconnect للخدمات الخارجية

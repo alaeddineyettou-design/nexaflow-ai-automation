@@ -22,7 +22,3 @@ export const LazyInteractiveAccordionDemo = lazy(() =>
 export const LazyCombinedFeaturedSection = lazy(() => 
   import('../components/ui/combined-featured-section')
 );
-
-export const LazyAdvancedChatWidget = lazy(() => 
-  import('../components/AdvancedChatWidget')
-);

@@ -4,6 +4,7 @@ import Navigation from './components/Navigation';
 import AnimatedShaderHero from './components/ui/animated-shader-hero';
 import Preloader from './components/ui/preloader';
 import { Toaster } from './components/ui/sonner';
+import OriginalChatWidget from './components/OriginalChatWidget';
 
 // Direct imports - Stable and reliable
 import { LogoCarouselDemo } from './components/LogoCarouselDemo';
@@ -13,15 +14,13 @@ import AIAutomationFeatures from './components/AIAutomationFeatures';
 import AIAutomationDatabaseDemo from './components/AIAutomationDatabaseDemo';
 import Pricing from './components/Pricing';
 import DisplayCards from './components/ui/display-cards';
-import { ChatWidgetRef } from './components/AdvancedChatWidget';
 
 // Import existing lazy components from utils
 import {
   LazyAI3DAssistantShowcase,
   LazyAIAutomationScrollShowcase,
   LazyInteractiveAccordionDemo,
-  LazyCombinedFeaturedSection,
-  LazyAdvancedChatWidget
+  LazyCombinedFeaturedSection
 } from './utils/lazyComponents';
 
 // Ultra-Fast Auto-Loading Component with Optimized Performance
@@ -86,18 +85,19 @@ const LoadingSpinner = () => (
 );
 
 function App() {
-  const [showPreloader, setShowPreloader] = useState(true);
-
-  const chatWidgetRef = useRef<ChatWidgetRef>(null);
+  const [showPreloader, setShowPreloader] = useState(false); // Preloader disabled for faster loading
 
   const handlePreloaderComplete = useCallback(() => {
     setShowPreloader(false);
   }, []);
 
   const handleStartChatting = useCallback(() => {
-    if (chatWidgetRef.current) {
-      chatWidgetRef.current.openChat();
+    // Try to open chat widget using global function
+    const windowWithChat = window as any;
+    if (windowWithChat.openChatWidget) {
+      windowWithChat.openChatWidget();
     } else {
+      // Fallback to Cal.com if chat widget is not ready
       window.open('https://cal.com/alae-automation/ai-automation-business', '_blank');
     }
   }, []);
@@ -201,14 +201,10 @@ function App() {
           </Suspense>
         </AutoLoadSection>
         
-        {/* Advanced Chat Widget - Auto Loading */}
-        <AutoLoadSection rootMargin="50px">
-          <Suspense fallback={<div />}>
-            <LazyAdvancedChatWidget ref={chatWidgetRef} />
-          </Suspense>
-        </AutoLoadSection>
-        
         <Toaster />
+        
+        {/* Original Chat Widget */}
+        <OriginalChatWidget />
       </div>
     </ThemeProvider>
   );
