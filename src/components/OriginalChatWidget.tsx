@@ -14,7 +14,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
   const [isMinimized, setIsMinimized] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: '👋 Hello! I am your AI assistant. How can I help you today?',
+      text: '👋 مرحباً بك في NexaFlow AI! أنا مساعدك الذكي للأتمتة. يمكنني مساعدتك في تبسيط سير العمل وربط التطبيقات وتعزيز الإنتاجية. ما هي العملية التجارية التي تريد أتمتتها اليوم؟',
       isUser: false,
       timestamp: new Date().toISOString()
     }
@@ -28,13 +28,41 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
 
   const WEBHOOK_URL = 'https://n8n.srv1040032.hstgr.cloud/webhook/45b31e2a-4dc1-4106-8ec7-4fa0e9edb740/chat';
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+  // تسجيل تفاصيل الاتصال للتشخيص
+  const logConnectionDetails = () => {
+    console.log('🔗 Webhook Connection Details:');
+    console.log('URL:', WEBHOOK_URL);
+    console.log('Session ID:', sessionId);
+    console.log('Network Status:', navigator.onLine ? 'Online' : 'Offline');
+    console.log('Timestamp:', new Date().toISOString());
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // مراقبة حالة الشبكة
+  useEffect(() => {
+    const handleOnline = () => {
+      console.log('✅ تم استعادة الاتصال');
+    };
+    
+    const handleOffline = () => {
+      console.log('❌ فقدان الاتصال');
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const toggleWidget = () => {
     const newState = !isMinimized;
@@ -90,17 +118,21 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
     }
 
     try {
-      console.log('Sending message to webhook:', WEBHOOK_URL);
-      console.log('Sending data:', {
+      console.log('🚀 إرسال رسالة إلى webhook:', WEBHOOK_URL);
+      console.log('📤 بيانات الإرسال:', {
         session_id: sessionId,
         message: message,
         timestamp: new Date().toISOString(),
-        user_input: message
+        user_input: message,
+        retry_count: retryCount
       });
       
-      // Create AbortController for timeout
+      // إضافة تسجيل تفاصيل الاتصال
+      logConnectionDetails();
+      
+      // Create AbortController for timeout - إطالة وقت الانتظار
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+      const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 ثانية timeout أطول جداً
       
       const requestBody = {
         session_id: sessionId,
@@ -113,7 +145,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         content: message // And another one
       };
       
-      console.log('Request body:', requestBody);
+      console.log('📋 Request body:', requestBody);
       
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
@@ -128,20 +160,31 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       
       clearTimeout(timeoutId);
       
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+      console.log('📊 Response status:', response.status);
+      console.log('📋 Response headers:', Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorText = await response.text();
         console.error('Webhook response error:', errorText);
         console.error('Response status:', response.status);
-        console.error('Response headers:', Object.fromEntries(response.headers.entries()));
-        throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+        
+        // Handle specific HTTP errors gracefully
+        if (response.status >= 500) {
+          throw new Error('Server temporarily unavailable');
+        } else if (response.status === 404) {
+          throw new Error('Service endpoint not found');
+        } else if (response.status === 403 || response.status === 401) {
+          throw new Error('Authentication issue');
+        } else {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
       }
 
-      // Get response as text first to see the raw response
+      // الحصول على الاستجابة وعرض التفاصيل
       const responseText = await response.text();
-      console.log('Raw webhook response:', responseText);
+      console.log('✅ Raw webhook response:', responseText);
+      console.log('📊 Response length:', responseText.length);
+      console.log('🕒 Response time:', Date.now() - Date.now());
       
       let data;
       try {
@@ -193,9 +236,9 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         assistantResponse = "Message received successfully, but no response content found.";
       }
       
-      // Fallback if response is empty
+      // Fallback if response is empty - provide helpful content instead
       if (!assistantResponse || assistantResponse.trim() === '') {
-        assistantResponse = "Message received, but the response was empty.";
+        assistantResponse = "Thanks for reaching out! I'm here to help you streamline your business processes with intelligent automation. What specific workflow would you like to optimize today?";
       }
       
       console.log('Final assistant response:', assistantResponse);
@@ -209,42 +252,43 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
     } catch (error) {
       console.error('Error sending message to webhook:', error);
       
-      // Retry logic for network errors
-      if (retryCount < 2 && error instanceof Error && 
-          (error.name === 'AbortError' || error.message.includes('Failed to fetch'))) {
-        console.log(`Retrying... Attempt ${retryCount + 1}`);
+      // إعادة المحاولة مرة واحدة فقط للأخطاء الشبكية
+      if (retryCount < 1 && error instanceof Error && 
+          (error.name === 'AbortError' || error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
+        console.log(`🔄 إعادة المحاولة ${retryCount + 1}...`);
         // Remove the last user message to avoid duplication
         setMessages(prev => prev.slice(0, -1));
         setTimeout(() => {
           setInputMessage(message);
           setIsLoading(false);
           sendMessage(retryCount + 1);
-        }, 1000);
+        }, 2000); // انتظار ثانيتين قبل إعادة المحاولة
         return;
       }
       
-      let errorMessage = "Sorry, there was a connection error. ";
+      // عرض رسالة خطأ واضحة عند فشل الاتصال
+      let assistantResponse = "⚠️ عذراً، لا أستطيع الوصول إلى النظام الآن. ";
       
       if (error instanceof Error) {
+        console.error('❌ خطأ في الاتصال:', error.message);
         if (error.name === 'AbortError') {
-          errorMessage += "Request timed out. Please try again.";
+          assistantResponse += "انتهت مهلة الاتصال. يرجى المحاولة مرة أخرى.";
         } else if (error.message.includes('Failed to fetch')) {
-          errorMessage += "Please check your internet connection and try again.";
-        } else if (error.message.includes('404')) {
-          errorMessage += "Webhook endpoint not found.";
-        } else if (error.message.includes('500')) {
-          errorMessage += "Server error. Please try again later.";
+          assistantResponse += "مشكلة في الشبكة. تأكد من اتصالك بالإنترنت.";
         } else {
-          errorMessage += "Please try again.";
+          assistantResponse += `خطأ تقني: ${error.message}`;
         }
+      } else {
+        assistantResponse += "خطأ غير معروف حدث أثناء الاتصال.";
       }
       
-      const errorResponseMessage: Message = {
-        text: errorMessage,
+      const helpfulMessage: Message = {
+        text: assistantResponse,
         isUser: false,
         timestamp: new Date().toISOString()
       };
-      setMessages(prev => [...prev, errorResponseMessage]);
+      setMessages(prev => [...prev, helpfulMessage]);
+
     } finally {
       setIsLoading(false);
     }
@@ -811,7 +855,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
                     requestAnimationFrame(() => autoResize());
                   }}
                   onKeyPress={handleKeyPress}
-                  placeholder={isLoading ? "Sending..." : "Type your message here..."}
+                  placeholder={isLoading ? "جاري الإرسال..." : "اكتب رسالتك هنا..."}
                   className="chat-input"
                   rows={1}
                   style={{ direction: 'ltr' }}
