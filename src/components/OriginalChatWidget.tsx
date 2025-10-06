@@ -14,7 +14,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
   const [isMinimized, setIsMinimized] = useState(true);
   const [messages, setMessages] = useState<Message[]>([
     {
-      text: '👋 مرحباً بك في NexaFlow AI! أنا مساعدك الذكي للأتمتة. يمكنني مساعدتك في تبسيط سير العمل وربط التطبيقات وتعزيز الإنتاجية. ما هي العملية التجارية التي تريد أتمتتها اليوم؟',
+      text: '👋 Welcome to NexaFlow AI! I\'m your intelligent automation assistant. I can help you streamline workflows, connect apps, and boost productivity. What business process would you like to automate today?',
       isUser: false,
       timestamp: new Date().toISOString()
     }
@@ -38,11 +38,22 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'end',
+        inline: 'nearest'
+      });
+    }
   };
 
   useEffect(() => {
-    scrollToBottom();
+    // تأخير طفيف لضمان عرض الرسالة قبل التنقل
+    const timeoutId = setTimeout(() => {
+      scrollToBottom();
+    }, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, [messages]);
 
   // مراقبة حالة الشبكة
@@ -500,13 +511,16 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
     .chat-messages {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 20px;
       display: flex;
       flex-direction: column;
       gap: 16px;
       background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
       position: relative;
-      overflow: hidden;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 #f1f5f9;
     }
 
     .chat-messages::before {
@@ -558,6 +572,10 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       border-radius: 18px;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
       position: relative;
+      max-height: 400px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .message.user .message-content {
@@ -609,11 +627,18 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
 
     .message-text {
       font-size: 0.9rem;
-      line-height: 1.5;
+      line-height: 1.6;
       word-wrap: break-word;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
       margin-bottom: 4px;
       color: #1f2937;
       font-weight: 500;
+      max-height: 300px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #cbd5e1 transparent;
     }
 
     .message-time {
@@ -757,20 +782,41 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
     }
 
     .chat-messages::-webkit-scrollbar {
-      width: 4px;
+      width: 6px;
     }
 
     .chat-messages::-webkit-scrollbar-track {
-      background: transparent;
+      background: #f1f5f9;
+      border-radius: 3px;
     }
 
     .chat-messages::-webkit-scrollbar-thumb {
       background: #cbd5e1;
-      border-radius: 2px;
+      border-radius: 3px;
+      transition: background 0.2s ease;
     }
 
     .chat-messages::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
+    }
+
+    /* تحسين شريط التمرير للرسائل الطويلة */
+    .message-text::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .message-text::-webkit-scrollbar-track {
+      background: #f8fafc;
+      border-radius: 2px;
+    }
+
+    .message-text::-webkit-scrollbar-thumb {
+      background: #e2e8f0;
+      border-radius: 2px;
+    }
+
+    .message-text::-webkit-scrollbar-thumb:hover {
+      background: #cbd5e1;
     }
   `;
 
@@ -817,9 +863,10 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
                 <div key={index} className={`message ${message.isUser ? 'user' : 'assistant'}`}>
                   <div className="message-content">
                     <div className="message-text" style={{ 
-                      direction: message.text.match(/[\u0600-\u06FF]/) ? 'rtl' : 'ltr',
+                      direction: 'ltr',
                       color: message.isUser ? '#ffffff' : '#1f2937',
-                      fontWeight: '500'
+                      fontWeight: '500',
+                      textAlign: 'left'
                     }}>
                       {message.text}
                     </div>
@@ -855,10 +902,10 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
                     requestAnimationFrame(() => autoResize());
                   }}
                   onKeyPress={handleKeyPress}
-                  placeholder={isLoading ? "جاري الإرسال..." : "اكتب رسالتك هنا..."}
+                  placeholder={isLoading ? "Sending..." : "Type your message here..."}
                   className="chat-input"
                   rows={1}
-                  style={{ direction: 'ltr' }}
+                  style={{ direction: 'ltr', textAlign: 'left' }}
                   disabled={isLoading}
                 />
                 <button 
