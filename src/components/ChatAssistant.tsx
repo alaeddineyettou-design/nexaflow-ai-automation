@@ -28,7 +28,7 @@ export function ChatAssistant() {
   useEffect(() => {
     const testConnection = async () => {
       try {
-        const response = await fetch('https://n8n.srv962505.hstgr.cloud/webhook/251e9030-abef-4a7e-9bb2-861135f75dd2', {
+        const response = await fetch('https://tradeloop.cloud/webhook/45b31e2a-4dc1-4106-8ec7-4fa0e9edb740/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export function ChatAssistant() {
 
       console.log('Payload:', payload)
 
-      const response = await fetch('https://n8n.srv962505.hstgr.cloud/webhook/251e9030-abef-4a7e-9bb2-861135f75dd2', {
+      const response = await fetch('https://tradeloop.cloud/webhook/45b31e2a-4dc1-4106-8ec7-4fa0e9edb740/chat', {
         method: 'POST',
         mode: 'cors',
         headers: {

@@ -26,7 +26,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const WEBHOOK_URL = 'https://n8n.srv1040032.hstgr.cloud/webhook/45b31e2a-4dc1-4106-8ec7-4fa0e9edb740/chat';
+  const WEBHOOK_URL = 'https://tradeloop.cloud/webhook/45b31e2a-4dc1-4106-8ec7-4fa0e9edb740/chat';
 
   // تسجيل تفاصيل الاتصال للتشخيص
   const logConnectionDetails = () => {

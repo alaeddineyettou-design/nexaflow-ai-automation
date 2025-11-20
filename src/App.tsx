@@ -18,9 +18,7 @@ import DisplayCards from './components/ui/display-cards';
 // Import existing lazy components from utils
 import {
   LazyAI3DAssistantShowcase,
-  LazyAIAutomationScrollShowcase,
-  LazyInteractiveAccordionDemo,
-  LazyCombinedFeaturedSection
+  LazyAIAutomationScrollShowcase
 } from './utils/lazyComponents';
 
 // Ultra-Fast Auto-Loading Component with Optimized Performance
@@ -170,8 +168,6 @@ function App() {
           {/* Interactive Features */}
           <AutoLoadSection rootMargin="200px">
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyInteractiveAccordionDemo />
-              <LazyCombinedFeaturedSection />
             </Suspense>
           </AutoLoadSection>
         </section>

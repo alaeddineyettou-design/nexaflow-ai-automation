@@ -61,7 +61,7 @@ const Pricing = () => {
         }
         subtitle="Professional automation services by Alaeddine - Choose the perfect package to transform your business operations with expert Make.com and n8n implementations."
         plans={pricingPlans}
-        showAnimatedBackground={true} // Enable the glowing background
+        showAnimatedBackground={false} // Disable the glowing background for better performance
       />
     </section>
   );
