@@ -19,6 +19,12 @@ export const LazyInteractiveAccordionDemo = lazy(() =>
   import('../components/InteractiveAccordionDemo')
 );
 
-export const LazyCombinedFeaturedSection = lazy(() => 
-  import('../components/ui/combined-featured-section')
+export const LazyFeatures = lazy(() => 
+  import('../components/Features')
+);
+
+export const LazyChatAssistant = lazy(() => 
+  import('../components/ChatAssistant').then(module => ({ 
+    default: module.ChatAssistant 
+  }))
 );

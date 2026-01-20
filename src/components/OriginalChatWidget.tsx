@@ -22,11 +22,11 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const WEBHOOK_URL = 'https://n8n.srv1040032.hstgr.cloud/webhook/45b31e2a-4dc1-4106-8ec7-4fa0e9edb740/chat';
+  const WEBHOOK_URL = 'https://tradeloop.cloud/webhook/NexaFlow';
 
   // تسجيل تفاصيل الاتصال للتشخيص
   const logConnectionDetails = () => {
@@ -39,7 +39,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
 
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ 
+      messagesEndRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'end',
         inline: 'nearest'
@@ -52,7 +52,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
     const timeoutId = setTimeout(() => {
       scrollToBottom();
     }, 100);
-    
+
     return () => clearTimeout(timeoutId);
   }, [messages]);
 
@@ -61,7 +61,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
     const handleOnline = () => {
       console.log('✅ تم استعادة الاتصال');
     };
-    
+
     const handleOffline = () => {
       console.log('❌ فقدان الاتصال');
     };
@@ -90,7 +90,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
     // Add global function to open chat widget
     (window as any).openChatWidget = openWidget;
     (window as any).toggleChatWidget = toggleWidget;
-    
+
     // Cleanup on unmount
     return () => {
       delete (window as any).openChatWidget;
@@ -137,14 +137,14 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         user_input: message,
         retry_count: retryCount
       });
-      
+
       // إضافة تسجيل تفاصيل الاتصال
       logConnectionDetails();
-      
+
       // Create AbortController for timeout - إطالة وقت الانتظار
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 45000); // 45 ثانية timeout أطول جداً
-      
+
       const requestBody = {
         session_id: sessionId,
         message: message,
@@ -155,9 +155,9 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         query: message, // Yet another possibility
         content: message // And another one
       };
-      
+
       console.log('📋 Request body:', requestBody);
-      
+
       const response = await fetch(WEBHOOK_URL, {
         method: 'POST',
         headers: {
@@ -168,9 +168,9 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         body: JSON.stringify(requestBody),
         signal: controller.signal
       });
-      
+
       clearTimeout(timeoutId);
-      
+
       console.log('📊 Response status:', response.status);
       console.log('📋 Response headers:', Object.fromEntries(response.headers.entries()));
 
@@ -178,7 +178,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         const errorText = await response.text();
         console.error('Webhook response error:', errorText);
         console.error('Response status:', response.status);
-        
+
         // Handle specific HTTP errors gracefully
         if (response.status >= 500) {
           throw new Error('Server temporarily unavailable');
@@ -196,7 +196,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       console.log('✅ Raw webhook response:', responseText);
       console.log('📊 Response length:', responseText.length);
       console.log('🕒 Response time:', Date.now() - Date.now());
-      
+
       let data;
       try {
         data = JSON.parse(responseText);
@@ -206,10 +206,10 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         // If it's not JSON, treat the response text as the message
         data = { message: responseText };
       }
-      
+
       // Handle different possible response formats from n8n webhook
       let assistantResponse = '';
-      
+
       // Check for various possible response structures
       if (data && typeof data === 'object') {
         if (data.response) {
@@ -246,14 +246,14 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       } else {
         assistantResponse = "Message received successfully, but no response content found.";
       }
-      
+
       // Fallback if response is empty - provide helpful content instead
       if (!assistantResponse || assistantResponse.trim() === '') {
         assistantResponse = "Thanks for reaching out! I'm here to help you streamline your business processes with intelligent automation. What specific workflow would you like to optimize today?";
       }
-      
+
       console.log('Final assistant response:', assistantResponse);
-      
+
       const assistantMessage: Message = {
         text: assistantResponse,
         isUser: false,
@@ -262,10 +262,10 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Error sending message to webhook:', error);
-      
+
       // إعادة المحاولة مرة واحدة فقط للأخطاء الشبكية
-      if (retryCount < 1 && error instanceof Error && 
-          (error.name === 'AbortError' || error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
+      if (retryCount < 1 && error instanceof Error &&
+        (error.name === 'AbortError' || error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
         console.log(`🔄 إعادة المحاولة ${retryCount + 1}...`);
         // Remove the last user message to avoid duplication
         setMessages(prev => prev.slice(0, -1));
@@ -276,10 +276,10 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         }, 2000); // انتظار ثانيتين قبل إعادة المحاولة
         return;
       }
-      
+
       // عرض رسالة خطأ واضحة عند فشل الاتصال
       let assistantResponse = "⚠️ عذراً، لا أستطيع الوصول إلى النظام الآن. ";
-      
+
       if (error instanceof Error) {
         console.error('❌ خطأ في الاتصال:', error.message);
         if (error.name === 'AbortError') {
@@ -292,7 +292,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       } else {
         assistantResponse += "خطأ غير معروف حدث أثناء الاتصال.";
       }
-      
+
       const helpfulMessage: Message = {
         text: assistantResponse,
         isUser: false,
@@ -827,8 +827,8 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
         {isMinimized ? (
           <button className="chat-toggle-btn" onClick={toggleWidget}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M8 12h.01M12 12h.01M16 12h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M8 12h.01M12 12h.01M16 12h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <span className="chat-notification">AI Automation Assistant</span>
           </button>
@@ -838,10 +838,10 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
               <div className="chat-header-info">
                 <div className="chat-avatar">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 1L21.5 6.5V17.5L12 23L2.5 17.5V6.5L12 1Z" stroke="currentColor" strokeWidth="1.5" fill="none"/>
-                    <circle cx="12" cy="9" r="2" fill="currentColor"/>
-                    <path d="M12 13C10.5 13 9 14 9 15.5V16H15V15.5C15 14 13.5 13 12 13Z" fill="currentColor"/>
-                    <path d="M8 8L10 10M16 8L14 10M8 16L10 14M16 16L14 14" stroke="currentColor" strokeWidth="1"/>
+                    <path d="M12 1L21.5 6.5V17.5L12 23L2.5 17.5V6.5L12 1Z" stroke="currentColor" strokeWidth="1.5" fill="none" />
+                    <circle cx="12" cy="9" r="2" fill="currentColor" />
+                    <path d="M12 13C10.5 13 9 14 9 15.5V16H15V15.5C15 14 13.5 13 12 13Z" fill="currentColor" />
+                    <path d="M8 8L10 10M16 8L14 10M8 16L10 14M16 16L14 14" stroke="currentColor" strokeWidth="1" />
                   </svg>
                 </div>
                 <div className="chat-header-text">
@@ -852,7 +852,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
               <div className="chat-header-actions">
                 <button className="chat-action-btn" onClick={toggleWidget}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                    <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>
@@ -862,7 +862,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
               {messages.map((message, index) => (
                 <div key={index} className={`message ${message.isUser ? 'user' : 'assistant'}`}>
                   <div className="message-content">
-                    <div className="message-text" style={{ 
+                    <div className="message-text" style={{
                       direction: 'ltr',
                       color: message.isUser ? '#ffffff' : '#1f2937',
                       fontWeight: '500',
@@ -874,7 +874,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
                   </div>
                 </div>
               ))}
-              
+
               {isLoading && (
                 <div className="message assistant">
                   <div className="message-content">
@@ -908,14 +908,14 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
                   style={{ direction: 'ltr', textAlign: 'left' }}
                   disabled={isLoading}
                 />
-                <button 
-                  onClick={handleSendMessage} 
+                <button
+                  onClick={handleSendMessage}
                   className="chat-send-btn"
                   disabled={isLoading || !inputMessage.trim()}
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                    <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </button>
               </div>

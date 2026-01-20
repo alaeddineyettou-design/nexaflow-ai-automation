@@ -1,7 +1,7 @@
-"use client" 
+"use client"
 
-import { motion } from "motion/react";
- 
+import { motion } from "framer-motion";
+
 export const BlurredStagger = ({
   text = "we love hextaui.com ❤️",
   className = "text-3xl font-bold tracking-wide text-balance md:text-4xl lg:text-5xl xl:font-extrabold text-white",
@@ -14,23 +14,23 @@ export const BlurredStagger = ({
   delay?: number;
 }) => {
   const headingText = text;
- 
+
   const container = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05,
+        staggerChildren: 0.01,
         delayChildren: delay,
       },
     },
   };
- 
+
   const letterAnimation = {
     hidden: {
       opacity: 0,
-      filter: "blur(20px)",
-      y: 20,
+      filter: "blur(10px)",
+      y: 10,
     },
     show: {
       opacity: 1,
@@ -39,10 +39,10 @@ export const BlurredStagger = ({
     },
   };
 
-  const textClassName = gradientColors 
+  const textClassName = gradientColors
     ? `block bg-gradient-to-r ${gradientColors} bg-clip-text text-transparent font-bold`
     : className;
- 
+
   return (
     <>
       <div>
@@ -57,7 +57,7 @@ export const BlurredStagger = ({
             <motion.span
               key={index}
               variants={letterAnimation}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
             >
               {char === " " ? "\u00A0" : char}
             </motion.span>

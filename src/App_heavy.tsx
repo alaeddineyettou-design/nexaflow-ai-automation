@@ -1,4 +1,4 @@
-import { useState, useCallback, Suspense, useEffect } from 'react';
+import { useState, useCallback, useRef, Suspense, useEffect } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import Navigation from './components/Navigation';
 import AnimatedShaderHero from './components/ui/animated-shader-hero';
@@ -18,7 +18,8 @@ import {
   LazyAI3DAssistantShowcase,
   LazyAIAutomationScrollShowcase,
   LazyInteractiveAccordionDemo,
-  LazyCombinedFeaturedSection
+  LazyFeatures,
+  LazyChatAssistant
 } from './utils/lazyComponents';
 
 // Loading component للمكونات الثقيلة
@@ -61,7 +62,9 @@ function App() {
   }, []);
 
   const handleStartChatting = useCallback(() => {
-    window.open('https://cal.com/alae-automation/ai-automation-business', '_blank');
+    if (chatWidgetRef.current) {
+      chatWidgetRef.current.openChat();
+    }
   }, []);
 
   return (
@@ -132,7 +135,7 @@ function App() {
           {/* Combined Featured Section - Analytics Dashboard */}
           <section id="analytics" className="relative">
             <Suspense fallback={<LoadingSpinner />}>
-              <LazyCombinedFeaturedSection />
+              <LazyFeatures />
             </Suspense>
           </section>
 
@@ -177,6 +180,12 @@ function App() {
             <Footerdemo />
           </footer>
         </main>
+        
+        {/* Chat Assistant Widget */}
+        <Suspense fallback={null}>
+          <LazyChatAssistant />
+        </Suspense>
+        
         <Toaster />
       </div>
     </ThemeProvider>
