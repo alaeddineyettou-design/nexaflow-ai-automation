@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { RippleButton } from "@/components/ui/multi-type-ripple-buttons";
 // --- Internal Helper Components (Not exported) --- //
 
 const CheckIcon = ({ className }: { className?: string }) => (
@@ -167,16 +166,14 @@ export const PricingCard = ({
   planName, description, features, buttonText, isPopular = false, buttonVariant = 'primary'
 }: PricingCardProps) => {
   const cardClasses = `
-    backdrop-blur-[14px] bg-gradient-to-br rounded-2xl shadow-xl flex-1 max-w-xs px-7 py-8 flex flex-col transition-all duration-300
-    from-black/5 to-black/0 border border-black/10
-    dark:from-white/10 dark:to-white/5 dark:border-white/10 dark:backdrop-brightness-[0.91]
-    ${isPopular ? 'scale-105 relative ring-2 ring-cyan-400/20 dark:from-white/20 dark:to-white/10 dark:border-cyan-400/30 shadow-2xl' : ''}
+    bg-white dark:bg-gray-800 rounded-2xl shadow-lg flex-1 max-w-xs px-7 py-8 flex flex-col border border-gray-200 dark:border-gray-700
+    ${isPopular ? 'relative ring-2 ring-cyan-400/30 shadow-xl' : ''}
   `;
   const buttonClasses = `
-    mt-auto w-full py-2.5 rounded-xl font-semibold text-[14px] transition font-sans
+    mt-auto w-full py-2.5 rounded-xl font-semibold text-[14px] font-sans
     ${buttonVariant === 'primary' 
-      ? 'bg-cyan-400 hover:bg-cyan-300 text-foreground' 
-      : 'bg-black/10 hover:bg-black/20 text-foreground border border-black/20 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white dark:border-white/20'
+      ? 'bg-cyan-500 hover:bg-cyan-600 text-white' 
+      : 'bg-gray-100 hover:bg-gray-200 text-gray-900 border border-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-white dark:border-gray-600'
     }
   `;
 
@@ -199,7 +196,7 @@ export const PricingCard = ({
           </li>
         ))}
       </ul>
-      <RippleButton 
+      <button 
         className={buttonClasses.trim()}
         onClick={() => {
           const contactSection = document.getElementById('contact');
@@ -209,7 +206,7 @@ export const PricingCard = ({
         }}
       >
         {buttonText}
-      </RippleButton>
+      </button>
     </div>
   );
 };
@@ -239,7 +236,7 @@ export const ModernPricingPage = ({
       {showAnimatedBackground && <ShaderCanvas />}
       <main className="relative z-10 w-full flex flex-col items-center justify-center px-4 py-16">
         <div className="w-full max-w-5xl mx-auto text-center mb-14">
-          <h1 className="text-[48px] md:text-[64px] font-extralight leading-tight tracking-[-0.03em] bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-cyan-500 to-blue-600 dark:from-white dark:via-cyan-300 dark:to-blue-400 font-display">
+          <h1 className="text-[48px] md:text-[64px] font-extralight leading-tight tracking-[-0.03em] text-gray-900 dark:text-white font-display">
             {title}
           </h1>
           <p className="mt-3 text-[16px] md:text-[20px] text-foreground/80 max-w-2xl mx-auto font-sans">
