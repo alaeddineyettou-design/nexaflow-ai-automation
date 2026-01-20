@@ -195,56 +195,79 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       const responseText = await response.text();
       console.log('✅ Raw webhook response:', responseText);
       console.log('📊 Response length:', responseText.length);
-      console.log('🕒 Response time:', Date.now() - Date.now());
 
-      let data;
-      try {
-        data = JSON.parse(responseText);
-        console.log('Parsed webhook response:', data);
-      } catch (parseError) {
-        console.error('Failed to parse response as JSON:', parseError);
-        // If it's not JSON, treat the response text as the message
-        data = { message: responseText };
-      }
-
-      // Handle different possible response formats from n8n webhook
       let assistantResponse = '';
 
-      // Check for various possible response structures
-      if (data && typeof data === 'object') {
-        if (data.response) {
-          assistantResponse = data.response;
-        } else if (data.message) {
-          assistantResponse = data.message;
-        } else if (data.reply) {
-          assistantResponse = data.reply;
-        } else if (data.text) {
-          assistantResponse = data.text;
-        } else if (data.content) {
-          assistantResponse = data.content;
-        } else if (data.output) {
-          assistantResponse = data.output;
-        } else if (data.result) {
-          assistantResponse = data.result;
-        } else if (data.data) {
-          // Sometimes the response is nested in a data field
-          if (typeof data.data === 'string') {
-            assistantResponse = data.data;
-          } else if (data.data.message) {
-            assistantResponse = data.data.message;
-          } else if (data.data.response) {
-            assistantResponse = data.data.response;
-          } else {
-            assistantResponse = JSON.stringify(data.data);
+      // Check if response is streaming format (multiple JSON objects)
+      if (responseText.includes('"type":"begin"') || responseText.includes('"type":"item"')) {
+        console.log('🔄 Detected streaming response format');
+
+        // Split by newlines and parse each JSON object
+        const lines = responseText.split('\n').filter(line => line.trim());
+
+        for (const line of lines) {
+          try {
+            const obj = JSON.parse(line);
+
+            // Extract content from the "item" type object
+            if (obj.type === 'item' && obj.content) {
+              assistantResponse += obj.content;
+              console.log('📝 Extracted content:', obj.content);
+            }
+          } catch (e) {
+            // Skip invalid JSON lines
+            console.warn('⚠️ Failed to parse line:', line);
           }
-        } else {
-          // If none of the expected fields exist, stringify the whole response
-          assistantResponse = JSON.stringify(data);
         }
-      } else if (typeof data === 'string') {
-        assistantResponse = data;
       } else {
-        assistantResponse = "Message received successfully, but no response content found.";
+        // Try to parse as regular JSON
+        let data;
+        try {
+          data = JSON.parse(responseText);
+          console.log('Parsed webhook response:', data);
+        } catch (parseError) {
+          console.error('Failed to parse response as JSON:', parseError);
+          // If it's not JSON, treat the response text as the message
+          data = { message: responseText };
+        }
+
+        // Handle different possible response formats from n8n webhook
+        // Check for various possible response structures
+        if (data && typeof data === 'object') {
+          if (data.response) {
+            assistantResponse = data.response;
+          } else if (data.message) {
+            assistantResponse = data.message;
+          } else if (data.reply) {
+            assistantResponse = data.reply;
+          } else if (data.text) {
+            assistantResponse = data.text;
+          } else if (data.content) {
+            assistantResponse = data.content;
+          } else if (data.output) {
+            assistantResponse = data.output;
+          } else if (data.result) {
+            assistantResponse = data.result;
+          } else if (data.data) {
+            // Sometimes the response is nested in a data field
+            if (typeof data.data === 'string') {
+              assistantResponse = data.data;
+            } else if (data.data.message) {
+              assistantResponse = data.data.message;
+            } else if (data.data.response) {
+              assistantResponse = data.data.response;
+            } else {
+              assistantResponse = JSON.stringify(data.data);
+            }
+          } else {
+            // If none of the expected fields exist, stringify the whole response
+            assistantResponse = JSON.stringify(data);
+          }
+        } else if (typeof data === 'string') {
+          assistantResponse = data;
+        } else {
+          assistantResponse = "Message received successfully, but no response content found.";
+        }
       }
 
       // Fallback if response is empty - provide helpful content instead
@@ -257,7 +280,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
       const assistantMessage: Message = {
         text: assistantResponse,
         isUser: false,
-        timestamp: data.timestamp || new Date().toISOString()
+        timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
