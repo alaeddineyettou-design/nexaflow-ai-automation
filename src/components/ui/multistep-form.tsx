@@ -86,7 +86,7 @@ const AutomationForm = () => {
 
   const updateFormData = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    
+
     // Auto-submit when automation needs field is completed
     if (field === 'automationGoals' && value.trim() !== '' && currentStep === 2) {
       handleAutoSubmit();
@@ -118,7 +118,7 @@ const AutomationForm = () => {
 
   const handleAutoSubmit = async () => {
     if (isAutoSubmitting) return;
-    
+
     setIsAutoSubmitting(true);
 
     try {
@@ -132,7 +132,7 @@ const AutomationForm = () => {
         stepCompleted: "automation-goals"
       };
 
-      await fetch('https://n8n.srv962505.hstgr.cloud/webhook/d660b205-ab80-498f-9660-3e1ec6ed1f6b', {
+      await fetch('https://tradeloop.cloud/webhook/website', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ const AutomationForm = () => {
         contactPhone: "+49 15560 957826"
       };
 
-      const response = await fetch('https://n8n.srv962505.hstgr.cloud/webhook/d660b205-ab80-498f-9660-3e1ec6ed1f6b', {
+      const response = await fetch('https://tradeloop.cloud/webhook/website', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

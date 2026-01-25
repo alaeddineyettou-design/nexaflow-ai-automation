@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/webhook': {
-        target: 'https://n8n.srv962505.hstgr.cloud',
+        target: 'https://tradeloop.cloud',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/webhook/, '/webhook'),
         secure: true,

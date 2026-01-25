@@ -26,7 +26,7 @@ const OriginalChatWidget: React.FC<OriginalChatWidgetProps> = ({ onToggle }) => 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const WEBHOOK_URL = 'https://tradeloop.cloud/webhook/NexaFlow';
+  const WEBHOOK_URL = 'https://tradeloop.cloud/webhook/website';
 
   // تسجيل تفاصيل الاتصال للتشخيص
   const logConnectionDetails = () => {
