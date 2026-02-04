@@ -16,12 +16,25 @@ export default defineConfig({
     },
   },
   build: {
-    // Simple and reliable build
     target: 'es2020',
     minify: 'terser',
     sourcemap: false,
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 500,
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Core React - loads first
+          'vendor-react': ['react', 'react-dom'],
+          // Heavy animation library - loads on demand
+          'vendor-framer': ['framer-motion'],
+          // 3D/WebGL libraries - loads only when needed
+          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
+          // GSAP animation - loads on demand
+          'vendor-gsap': ['gsap'],
+        },
+      },
+    },
   },
   resolve: {
     alias: {

@@ -1,19 +1,18 @@
-import { useState, useCallback, Suspense, useRef, useEffect } from 'react';
+import { useState, Suspense, useRef, useEffect, lazy } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import Navigation from './components/Navigation';
-import AnimatedShaderHero from './components/ui/animated-shader-hero';
-import Preloader from './components/ui/preloader';
 import { Toaster } from './components/ui/sonner';
-import OriginalChatWidget from './components/OriginalChatWidget';
 
-// Direct imports - Stable and reliable
-import { ContactDemo } from './components/ContactDemo';
-import { Footerdemo } from './components/ui/footer-section';
-import AIAutomationFeatures from './components/AIAutomationFeatures';
-import AIAutomationDatabaseDemo from './components/AIAutomationDatabaseDemo';
-import Pricing from './components/Pricing';
+// Lazy loaded components - only load when needed
+const AnimatedShaderHero = lazy(() => import('./components/ui/animated-shader-hero'));
+const ContactDemo = lazy(() => import('./components/ContactDemo').then(m => ({ default: m.ContactDemo })));
+const Footerdemo = lazy(() => import('./components/ui/footer-section').then(m => ({ default: m.Footerdemo })));
+const AIAutomationFeatures = lazy(() => import('./components/AIAutomationFeatures'));
+const AIAutomationDatabaseDemo = lazy(() => import('./components/AIAutomationDatabaseDemo'));
+const Pricing = lazy(() => import('./components/Pricing'));
+const OriginalChatWidget = lazy(() => import('./components/OriginalChatWidget'));
 
-// Removed heavy 3D components for performance
+// Performance: Preloader removed for faster initial load
 
 // Ultra-Fast Auto-Loading Component with Optimized Performance
 const AutoLoadSection = ({
@@ -76,28 +75,38 @@ const LoadingSpinner = () => (
   </div>
 );
 
+// Lightweight hero fallback for instant display
+const HeroFallback = () => (
+  <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+    <div className="text-center space-y-4">
+      <h1 className="text-5xl md:text-7xl font-bold text-white">NEXAFLOW AI</h1>
+      <p className="text-xl text-white/70">Loading...</p>
+    </div>
+  </div>
+);
+
 function App() {
-  const [showPreloader, setShowPreloader] = useState(false); // Preloader disabled for faster loading
+  const [showChat, setShowChat] = useState(false);
 
-  const handlePreloaderComplete = useCallback(() => {
-    setShowPreloader(false);
+  // Defer chat widget loading by 3 seconds for faster initial render
+  useEffect(() => {
+    const timer = setTimeout(() => setShowChat(true), 3000);
+    return () => clearTimeout(timer);
   }, []);
-
-  if (showPreloader) {
-    return <Preloader onComplete={handlePreloaderComplete} />;
-  }
 
   return (
     <ThemeProvider>
       <div className="min-h-screen bg-slate-950">
         <Navigation />
 
-        {/* Hero Section - Ultra Fast & Lightweight */}
+        {/* Hero Section - Lazy loaded with instant fallback */}
         <section id="home">
-          <AnimatedShaderHero
-            headline={{ line1: "NEXAFLOW AI", line2: "Automation" }}
-            subtitle="Transform your business with intelligent automation - Lightning Fast!"
-          />
+          <Suspense fallback={<HeroFallback />}>
+            <AnimatedShaderHero
+              headline={{ line1: "NEXAFLOW AI", line2: "Automation" }}
+              subtitle="Transform your business with intelligent automation - Lightning Fast!"
+            />
+          </Suspense>
         </section>
 
         {/* Database Section */}
@@ -146,8 +155,12 @@ function App() {
 
         <Toaster />
 
-        {/* Original Chat Widget */}
-        <OriginalChatWidget />
+        {/* Chat Widget - Deferred loading for performance */}
+        {showChat && (
+          <Suspense fallback={null}>
+            <OriginalChatWidget />
+          </Suspense>
+        )}
       </div>
     </ThemeProvider>
   );

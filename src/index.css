@@ -7,6 +7,29 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === PERFORMANCE OPTIMIZATIONS === */
+/* Skip rendering for below-fold content until visible */
+section:not(:first-of-type) {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px;
+}
+
+/* GPU acceleration for animated elements */
+.animate-float,
+.animate-pulse,
+.animate-spin,
+.animate-spin-slow {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+/* Reduce paint operations */
+.glass,
+.backdrop-blur-xl {
+  will-change: backdrop-filter;
+}
+
+
 :root {
   --color-1: 0 100% 63%;
   --color-2: 270 100% 63%;
