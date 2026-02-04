@@ -17,21 +17,23 @@ export default defineConfig({
   },
   build: {
     target: 'es2020',
-    minify: 'terser',
+    minify: 'esbuild',
     sourcemap: false,
     chunkSizeWarningLimit: 500,
     emptyOutDir: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          // Core React - loads first
-          'vendor-react': ['react', 'react-dom'],
-          // Heavy animation library - loads on demand
-          'vendor-framer': ['framer-motion'],
-          // 3D/WebGL libraries - loads only when needed
-          'vendor-three': ['three', '@react-three/fiber', '@react-three/drei'],
-          // GSAP animation - loads on demand
-          'vendor-gsap': ['gsap'],
+        manualChunks(id) {
+          // Split vendor chunks based on actual imports
+          if (id.includes('node_modules')) {
+            if (id.includes('react-dom') || id.includes('react')) {
+              return 'vendor-react';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-framer';
+            }
+            // Don't force three.js into separate chunk - let Vite handle it
+          }
         },
       },
     },
